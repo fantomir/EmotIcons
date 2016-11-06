@@ -1,7 +1,7 @@
 ﻿using System;
 using Android.Content;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace com.vasundharareddy.emojicon
 {
@@ -11,22 +11,22 @@ namespace com.vasundharareddy.emojicon
 		private const string PREF_RECENTS = "recent_emojis";
 		private const string PREF_PAGE = "recent_page";
 		private const int MAX_SAVE = 40;
-		private static Context m_Context;
-		private static List<Emojicon> m_Emojicons;
+
+		private static Context _context;
+		public static int Count => Recents.Count;
+		public static List<Emojicon> Recents { get; private set; }
 
 		public static Context Context
 		{
 			set
 			{
-				m_Context = value.ApplicationContext;
+				_context = value.ApplicationContext;
 				LoadRecents();
 			}
 		}
 
 		private static ISharedPreferences Preferences
-		{
-			get { return m_Context.GetSharedPreferences(PREFERENCE_NAME, FileCreationMode.Private); }
-		}
+			=> _context.GetSharedPreferences(PREFERENCE_NAME, FileCreationMode.Private);
 
 		public static int RecentPage
 		{
@@ -34,74 +34,63 @@ namespace com.vasundharareddy.emojicon
 			set { Preferences.Edit().PutInt(PREF_PAGE, value).Commit(); }
 		}
 
-		public static int Count
-		{
-			get { return m_Emojicons.Count; }
-		}
-
-		public static List<Emojicon> Recents
-		{
-			get { return m_Emojicons; }
-		}
-
 		public static void Push(Emojicon emojicon)
 		{
-			if (m_Emojicons.Contains(emojicon))
-				m_Emojicons.Remove(emojicon);
-			m_Emojicons.Insert(0, emojicon);
+			if (Recents.Contains(emojicon))
+				Recents.Remove(emojicon);
+
+			Recents.Insert(0, emojicon);
 			SaveRecents();
 		}
 
 		public static void Add(Emojicon emojicon)
 		{
-			m_Emojicons.Add(emojicon);
+			Recents.Add(emojicon);
 			SaveRecents();
 		}
 
 		public static void Add(int index, Emojicon emojicon)
 		{
-			m_Emojicons.Insert(index, emojicon);
+			Recents.Insert(index, emojicon);
 		}
 
 		public static void Remove(Emojicon emojicon)
 		{
-			m_Emojicons.Remove(emojicon);
+			Recents.Remove(emojicon);
 			SaveRecents();
 		}
 
 		private static void LoadRecents()
 		{
-			ISharedPreferences pref = Preferences;
-			string str = pref.GetString(PREF_RECENTS, "");
-			Console.WriteLine("Load:" + str);
-			string[] emojicons = str.Split('#');
-			m_Emojicons = new List<Emojicon>();
-			foreach (var emojicon in emojicons)
+			var loadedPreferences = Preferences.GetString(PREF_RECENTS, string.Empty);
+#if DEBUG
+			Console.WriteLine("Loaded emojicon preferences: " + loadedPreferences);
+#endif
+			var emojicons = loadedPreferences.Split('#');
+			Recents = new List<Emojicon>();
+			foreach (var emojicon in emojicons.Where(x => x != string.Empty))
 			{
 				try
 				{
-					//int codepoint =  Convert.ToInt32(emojicon);// Char.ConvertToUtf32(emojicon,0);
-					if (emojicon != "")
-						Add(Emojicon.FromChars(emojicon));
-					//Add(Emojicon.FromCodePoint(codepoint));
+					Add(new Emojicon(emojicon));
 				}
 				catch
 				{
-
+					// ignored
 				}
 			}
 		}
 
 		private static void SaveRecents()
 		{
-			if (m_Emojicons.Count == MAX_SAVE)
-				m_Emojicons.RemoveRange(0, 1);
+			if (Recents.Count == MAX_SAVE)
+				Recents.RemoveRange(0, 1);
 
-			string saveString = string.Empty;
-			foreach (var emoji in m_Emojicons)
+			var saveString = string.Empty;
+
+			foreach (var emoji in Recents.Where(x => x.Value != string.Empty))
 			{
-				if (emoji.Emoji != string.Empty)
-					saveString += emoji.Emoji.Replace(":", string.Empty) + "#";
+				saveString += emoji.Value.Replace(":", string.Empty) + "#";
 			}
 
 			Preferences.Edit().PutString(PREF_RECENTS, saveString).Commit();

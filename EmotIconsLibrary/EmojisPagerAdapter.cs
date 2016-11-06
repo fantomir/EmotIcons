@@ -1,27 +1,19 @@
-﻿using System;
-using Android.Support.V4.App;
+﻿using Android.Support.V4.App;
 using System.Collections.Generic;
 
 namespace com.vasundharareddy.emojicon
 {
 	public class EmojisPagerAdapter : FragmentStatePagerAdapter
 	{
-		private List<EmojiconGridFragment> fragments;
-		public EmojisPagerAdapter (FragmentManager fm, List<EmojiconGridFragment> fragments):base(fm)
+		private readonly List<EmojiconGridFragment> _fragments;
+
+		public EmojisPagerAdapter(FragmentManager fm, List<EmojiconGridFragment> fragments) : base(fm)
 		{
-			this.fragments = fragments;
+			_fragments = fragments;
 		}
-		public override Fragment GetItem (int position)
-		{
-			return fragments [position];
-		}
-		public override int Count
-		{
-			get
-			{
-				return fragments.Count;
-			}
-		}
+
+		public override Fragment GetItem(int position) => _fragments[position];
+
+		public override int Count => _fragments.Count;
 	}
 }
-

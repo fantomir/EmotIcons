@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace com.vasundharareddy.emojicon.Extensions
 {
-	public static class StringExtensions
+	internal static class StringExtensions
 	{
 		public static IEnumerable<int> IndexesOf(this string haystack, string needle)
 		{

@@ -184,7 +184,7 @@ namespace com.vasundharareddy.emojicon
 			["last_quarter_moon"] = Resource.Drawable.emoji_1f317,
 			["waning_crescent_moon"] = Resource.Drawable.emoji_1f318,
 			["crescent_moon"] = Resource.Drawable.emoji_1f319,
-			["stars"] = Resource.Drawable.emoji_1f303,  // TODO (rockerhieu) review this emoji
+			["stars"] = Resource.Drawable.emoji_1f303, // TODO (rockerhieu) review this emoji
 			["new_moon_with_face"] = Resource.Drawable.emoji_1f31a,
 			["first_quarter_moon_with_face"] = Resource.Drawable.emoji_1f31b,
 			["last_quarter_moon_with_face"] = Resource.Drawable.emoji_1f31c,
@@ -860,15 +860,16 @@ namespace com.vasundharareddy.emojicon
 		{
 			var hasChanges = false;
 
-			var regex = new Regex(@"(?<=\:)(\S*?)(?=\:)");
+			//return all substrings which without spaces and placed between chars ':'
+			var regex = new Regex(@"(?<=\:)(\S*?)(?=\:)");  
 
 			foreach (Match current in regex.Matches(spannable.ToString()))
 			{
-				int smileResourceId;
+				int emojiResourceId;
 
-				if (Emoticons.TryGetValue(current.Value, out smileResourceId))
+				if (Emoticons.TryGetValue(current.Value, out emojiResourceId))
 				{
-					var span = new EmojiconSpan(context, smileResourceId, emojiSize);
+					var span = new EmojiconSpan(context, emojiResourceId, emojiSize);
 
 					var start = current.Index - 1;
 					var end = current.Index + current.Length + 1;

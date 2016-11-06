@@ -52,11 +52,11 @@
     <Compile Include="EmojiconTextView.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
-    <Compile Include="Nature.cs" />
-    <Compile Include="Objects.cs" />
-    <Compile Include="People.cs" />
-    <Compile Include="Places.cs" />
-    <Compile Include="Symbols.cs" />
+    <Compile Include="EmojiCategories\Nature.cs" />
+    <Compile Include="EmojiCategories\Objects.cs" />
+    <Compile Include="EmojiCategories\People.cs" />
+    <Compile Include="EmojiCategories\Places.cs" />
+    <Compile Include="EmojiCategories\Symbols.cs" />
     <Compile Include="EmojiconEditText.cs" />
     <Compile Include="EmojiconGridFragment.cs" />
     <Compile Include="EmojiconSpan.cs" />
