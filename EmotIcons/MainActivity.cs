@@ -1,8 +1,5 @@
 ﻿using System;
 using Android.App;
-using Android.Content;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using Android.OS;
 using com.vasundharareddy.emojicon;
@@ -10,43 +7,30 @@ using Android.Support.V4.App;
 
 namespace EmotIcons
 {
-    [Activity(Label = "Launcher", MainLauncher = true)]	
-	public class MainActivity : Android.Support.V4.App.FragmentActivity
+	[Activity(Label = "Launcher", MainLauncher = true)]
+	public class MainActivity : FragmentActivity
 	{
-        EmojiconEditText m_EditEmojicon;
-        EmojiconTextView m_TextEmojicon;
-        private Button btncopy;
-		protected override void OnCreate (Bundle bundle)
+		private EmojiconEditText _editEmojicon;
+		private EmojiconTextView _textEmojicon;
+		private TextView _textPlain;
+
+		protected override void OnCreate(Bundle bundle)
 		{
-			base.OnCreate (bundle);
+			base.OnCreate(bundle);
+			SetContentView(Resource.Layout.Main);
 
-			// Set our view from the "main" layout resource
-			SetContentView (Resource.Layout.Main);
-			m_EditEmojicon = FindViewById<EmojiconEditText> (Resource.Id.editEmojicon);
-			m_TextEmojicon = FindViewById<EmojiconTextView> (Resource.Id.txtEmojicon);
-		    btncopy = FindViewById<Button>(Resource.Id.button1);
-			Android.Support.V4.App.FragmentManager mgr = SupportFragmentManager;
-			EmojiconsFragment.EmojiClicked += (e) => {
-				EmojiconsFragment.Input(m_EditEmojicon,e);
-			};
-			EmojiconsFragment.EmojiconBackspaceClicked += (v) => {
-				EmojiconsFragment.Backspace(m_EditEmojicon);
-			};
-			m_EditEmojicon.TextChanged += (object sender, Android.Text.TextChangedEventArgs e) => {
-				m_TextEmojicon.Text = e.Text.ToString();
-			};
+			_editEmojicon = FindViewById<EmojiconEditText>(Resource.Id.editEmojicon);
+			_textEmojicon = FindViewById<EmojiconTextView>(Resource.Id.txtEmojicon);
+			_textPlain = FindViewById<TextView>(Resource.Id.txtPlain);
 
-            btncopy.Click += btncopy_Click;
+			EmojiconsFragment.EmojiClicked += e => EmojiconsFragment.Input(_editEmojicon, e);
+			EmojiconsFragment.EmojiconBackspaceClicked += v => EmojiconsFragment.Backspace(_editEmojicon);
+
+			_editEmojicon.TextChanged += (sender, e) =>
+			{
+				_textEmojicon.Text = e.Text.ToString();
+				_textPlain.Text = e.Text.ToString();
+			};
 		}
-
-        void btncopy_Click(object sender, EventArgs e)
-        {
-            string lbltext = m_TextEmojicon.Text;
-            m_EditEmojicon.Text = "";
-            m_EditEmojicon.Text = lbltext;
-        }
 	}
 }
-
-
-        

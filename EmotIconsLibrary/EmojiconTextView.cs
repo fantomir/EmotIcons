@@ -55,7 +55,7 @@ namespace com.vasundharareddy.emojicon
 			set
 			{
 				SpannableStringBuilder builder = new SpannableStringBuilder(value);
-				EmojiconHandler.AddEmojis(Context, builder, mEmojiconSize, mTextStart, mTextLength);
+				EmojiconHandler.AddEmojis(Context, builder, mEmojiconSize);
 				base.TextFormatted = builder;
 			}
 			get{

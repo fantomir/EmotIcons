@@ -1,1522 +1,885 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
+using System.Text.RegularExpressions;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using Android.Util;
 using Android.Text;
-using Java.Lang;
 
 namespace com.vasundharareddy.emojicon
 {
-    class EmojiconHandler
-    {
-        private static readonly SparseIntArray sEmojisMap = new SparseIntArray(846);
-        private static readonly SparseIntArray sSoftbanksMap = new SparseIntArray(471);
-          
-        static EmojiconHandler()
-        {
-            // People
-            sEmojisMap.Put(0x1f604, Resource.Drawable.emoji_1f604);
-            sEmojisMap.Put(0x1f603, Resource.Drawable.emoji_1f603);
-            sEmojisMap.Put(0x1f600, Resource.Drawable.emoji_1f600);
-            sEmojisMap.Put(0x1f60a, Resource.Drawable.emoji_1f60a);
-            sEmojisMap.Put(0x263a,  Resource.Drawable.emoji_263a);
-            sEmojisMap.Put(0x1f609, Resource.Drawable.emoji_1f609);
-            sEmojisMap.Put(0x1f60d, Resource.Drawable.emoji_1f60d);
-            sEmojisMap.Put(0x1f618, Resource.Drawable.emoji_1f618);
-            sEmojisMap.Put(0x1f61a, Resource.Drawable.emoji_1f61a);
-            sEmojisMap.Put(0x1f617, Resource.Drawable.emoji_1f617);
-            sEmojisMap.Put(0x1f619, Resource.Drawable.emoji_1f619);
-            sEmojisMap.Put(0x1f61c, Resource.Drawable.emoji_1f61c);
-            sEmojisMap.Put(0x1f61d, Resource.Drawable.emoji_1f61d);
-            sEmojisMap.Put(0x1f61b, Resource.Drawable.emoji_1f61b);
-            sEmojisMap.Put(0x1f633, Resource.Drawable.emoji_1f633);
-            sEmojisMap.Put(0x1f601, Resource.Drawable.emoji_1f601);
-            sEmojisMap.Put(0x1f614, Resource.Drawable.emoji_1f614);
-            sEmojisMap.Put(0x1f60c, Resource.Drawable.emoji_1f60c);
-            sEmojisMap.Put(0x1f612, Resource.Drawable.emoji_1f612);
-            sEmojisMap.Put(0x1f61e, Resource.Drawable.emoji_1f61e);
-            sEmojisMap.Put(0x1f623, Resource.Drawable.emoji_1f623);
-            sEmojisMap.Put(0x1f622, Resource.Drawable.emoji_1f622);
-            sEmojisMap.Put(0x1f602, Resource.Drawable.emoji_1f602);
-            sEmojisMap.Put(0x1f62d, Resource.Drawable.emoji_1f62d);
-            sEmojisMap.Put(0x1f62a, Resource.Drawable.emoji_1f62a);
-            sEmojisMap.Put(0x1f625, Resource.Drawable.emoji_1f625);
-            sEmojisMap.Put(0x1f630, Resource.Drawable.emoji_1f630);
-            sEmojisMap.Put(0x1f605, Resource.Drawable.emoji_1f605);
-            sEmojisMap.Put(0x1f613, Resource.Drawable.emoji_1f613);
-            sEmojisMap.Put(0x1f629, Resource.Drawable.emoji_1f629);
-            sEmojisMap.Put(0x1f62b, Resource.Drawable.emoji_1f62b);
-            sEmojisMap.Put(0x1f628, Resource.Drawable.emoji_1f628);
-            sEmojisMap.Put(0x1f631, Resource.Drawable.emoji_1f631);
-            sEmojisMap.Put(0x1f620, Resource.Drawable.emoji_1f620);
-            sEmojisMap.Put(0x1f621, Resource.Drawable.emoji_1f621);
-            sEmojisMap.Put(0x1f624, Resource.Drawable.emoji_1f624);
-            sEmojisMap.Put(0x1f616, Resource.Drawable.emoji_1f616);
-            sEmojisMap.Put(0x1f606, Resource.Drawable.emoji_1f606);
-            sEmojisMap.Put(0x1f60b, Resource.Drawable.emoji_1f60b);
-            sEmojisMap.Put(0x1f637, Resource.Drawable.emoji_1f637);
-            sEmojisMap.Put(0x1f60e, Resource.Drawable.emoji_1f60e);
-            sEmojisMap.Put(0x1f634, Resource.Drawable.emoji_1f634);
-            sEmojisMap.Put(0x1f635, Resource.Drawable.emoji_1f635);
-            sEmojisMap.Put(0x1f632, Resource.Drawable.emoji_1f632);
-            sEmojisMap.Put(0x1f61f, Resource.Drawable.emoji_1f61f);
-            sEmojisMap.Put(0x1f626, Resource.Drawable.emoji_1f626);
-            sEmojisMap.Put(0x1f627, Resource.Drawable.emoji_1f627);
-            sEmojisMap.Put(0x1f608, Resource.Drawable.emoji_1f608);
-            sEmojisMap.Put(0x1f47f, Resource.Drawable.emoji_1f47f);
-            sEmojisMap.Put(0x1f62e, Resource.Drawable.emoji_1f62e);
-            sEmojisMap.Put(0x1f62c, Resource.Drawable.emoji_1f62c);
-            sEmojisMap.Put(0x1f610, Resource.Drawable.emoji_1f610);
-            sEmojisMap.Put(0x1f615, Resource.Drawable.emoji_1f615);
-            sEmojisMap.Put(0x1f62f, Resource.Drawable.emoji_1f62f);
-            sEmojisMap.Put(0x1f636, Resource.Drawable.emoji_1f636);
-            sEmojisMap.Put(0x1f607, Resource.Drawable.emoji_1f607);
-            sEmojisMap.Put(0x1f60f, Resource.Drawable.emoji_1f60f);
-            sEmojisMap.Put(0x1f611, Resource.Drawable.emoji_1f611);
-            sEmojisMap.Put(0x1f472, Resource.Drawable.emoji_1f472);
-            sEmojisMap.Put(0x1f473, Resource.Drawable.emoji_1f473);
-            sEmojisMap.Put(0x1f46e, Resource.Drawable.emoji_1f46e);
-            sEmojisMap.Put(0x1f477, Resource.Drawable.emoji_1f477);
-            sEmojisMap.Put(0x1f482, Resource.Drawable.emoji_1f482);
-            sEmojisMap.Put(0x1f476, Resource.Drawable.emoji_1f476);
-            sEmojisMap.Put(0x1f466, Resource.Drawable.emoji_1f466);
-            sEmojisMap.Put(0x1f467, Resource.Drawable.emoji_1f467);
-            sEmojisMap.Put(0x1f468, Resource.Drawable.emoji_1f468);
-            sEmojisMap.Put(0x1f469, Resource.Drawable.emoji_1f469);
-            sEmojisMap.Put(0x1f474, Resource.Drawable.emoji_1f474);
-            sEmojisMap.Put(0x1f475, Resource.Drawable.emoji_1f475);
-            sEmojisMap.Put(0x1f471, Resource.Drawable.emoji_1f471);
-            sEmojisMap.Put(0x1f47c, Resource.Drawable.emoji_1f47c);
-            sEmojisMap.Put(0x1f478, Resource.Drawable.emoji_1f478);
-            sEmojisMap.Put(0x1f63a, Resource.Drawable.emoji_1f63a);
-            sEmojisMap.Put(0x1f638, Resource.Drawable.emoji_1f638);
-            sEmojisMap.Put(0x1f63b, Resource.Drawable.emoji_1f63b);
-            sEmojisMap.Put(0x1f63d, Resource.Drawable.emoji_1f63d);
-            sEmojisMap.Put(0x1f63c, Resource.Drawable.emoji_1f63c);
-            sEmojisMap.Put(0x1f640, Resource.Drawable.emoji_1f640);
-            sEmojisMap.Put(0x1f63f, Resource.Drawable.emoji_1f63f);
-            sEmojisMap.Put(0x1f639, Resource.Drawable.emoji_1f639);
-            sEmojisMap.Put(0x1f63e, Resource.Drawable.emoji_1f63e);
-            sEmojisMap.Put(0x1f479, Resource.Drawable.emoji_1f479);
-            sEmojisMap.Put(0x1f47a, Resource.Drawable.emoji_1f47a);
-            sEmojisMap.Put(0x1f648, Resource.Drawable.emoji_1f648);
-            sEmojisMap.Put(0x1f649, Resource.Drawable.emoji_1f649);
-            sEmojisMap.Put(0x1f64a, Resource.Drawable.emoji_1f64a);
-            sEmojisMap.Put(0x1f480, Resource.Drawable.emoji_1f480);
-            sEmojisMap.Put(0x1f47d, Resource.Drawable.emoji_1f47d);
-            sEmojisMap.Put(0x1f4a9, Resource.Drawable.emoji_1f4a9);
-            sEmojisMap.Put(0x1f525, Resource.Drawable.emoji_1f525);
-            sEmojisMap.Put(0x2728,  Resource.Drawable.emoji_2728);
-            sEmojisMap.Put(0x1f31f, Resource.Drawable.emoji_1f31f);
-            sEmojisMap.Put(0x1f4ab, Resource.Drawable.emoji_1f4ab);
-            sEmojisMap.Put(0x1f4a5, Resource.Drawable.emoji_1f4a5);
-            sEmojisMap.Put(0x1f4a2, Resource.Drawable.emoji_1f4a2);
-            sEmojisMap.Put(0x1f4a6, Resource.Drawable.emoji_1f4a6);
-            sEmojisMap.Put(0x1f4a7, Resource.Drawable.emoji_1f4a7);
-            sEmojisMap.Put(0x1f4a4, Resource.Drawable.emoji_1f4a4);
-            sEmojisMap.Put(0x1f4a8, Resource.Drawable.emoji_1f4a8);
-            sEmojisMap.Put(0x1f442, Resource.Drawable.emoji_1f442);
-            sEmojisMap.Put(0x1f440, Resource.Drawable.emoji_1f440);
-            sEmojisMap.Put(0x1f443, Resource.Drawable.emoji_1f443);
-            sEmojisMap.Put(0x1f445, Resource.Drawable.emoji_1f445);
-            sEmojisMap.Put(0x1f444, Resource.Drawable.emoji_1f444);
-            sEmojisMap.Put(0x1f44d, Resource.Drawable.emoji_1f44d);
-            sEmojisMap.Put(0x1f44e, Resource.Drawable.emoji_1f44e);
-            sEmojisMap.Put(0x1f44c, Resource.Drawable.emoji_1f44c);
-            sEmojisMap.Put(0x1f44a, Resource.Drawable.emoji_1f44a);
-            sEmojisMap.Put(0x270a,  Resource.Drawable.emoji_270a);
-            sEmojisMap.Put(0x270c,  Resource.Drawable.emoji_270c);
-            sEmojisMap.Put(0x1f44b, Resource.Drawable.emoji_1f44b);
-            sEmojisMap.Put(0x270b,  Resource.Drawable.emoji_270b);
-            sEmojisMap.Put(0x1f450, Resource.Drawable.emoji_1f450);
-            sEmojisMap.Put(0x1f446, Resource.Drawable.emoji_1f446);
-            sEmojisMap.Put(0x1f447, Resource.Drawable.emoji_1f447);
-            sEmojisMap.Put(0x1f449, Resource.Drawable.emoji_1f449);
-            sEmojisMap.Put(0x1f448, Resource.Drawable.emoji_1f448);
-            sEmojisMap.Put(0x1f64c, Resource.Drawable.emoji_1f64c);
-            sEmojisMap.Put(0x1f64f, Resource.Drawable.emoji_1f64f);
-            sEmojisMap.Put(0x261d,  Resource.Drawable.emoji_261d);
-            sEmojisMap.Put(0x1f44f, Resource.Drawable.emoji_1f44f);
-            sEmojisMap.Put(0x1f4aa, Resource.Drawable.emoji_1f4aa);
-            sEmojisMap.Put(0x1f6b6, Resource.Drawable.emoji_1f6b6);
-            sEmojisMap.Put(0x1f3c3, Resource.Drawable.emoji_1f3c3);
-            sEmojisMap.Put(0x1f483, Resource.Drawable.emoji_1f483);
-            sEmojisMap.Put(0x1f46b, Resource.Drawable.emoji_1f46b);
-            sEmojisMap.Put(0x1f46a, Resource.Drawable.emoji_1f46a);
-            sEmojisMap.Put(0x1f46c, Resource.Drawable.emoji_1f46c);
-            sEmojisMap.Put(0x1f46d, Resource.Drawable.emoji_1f46d);
-            sEmojisMap.Put(0x1f48f, Resource.Drawable.emoji_1f48f);
-            sEmojisMap.Put(0x1f491, Resource.Drawable.emoji_1f491);
-            sEmojisMap.Put(0x1f46f, Resource.Drawable.emoji_1f46f);
-            sEmojisMap.Put(0x1f646, Resource.Drawable.emoji_1f646);
-            sEmojisMap.Put(0x1f645, Resource.Drawable.emoji_1f645);
-            sEmojisMap.Put(0x1f481, Resource.Drawable.emoji_1f481);
-            sEmojisMap.Put(0x1f64b, Resource.Drawable.emoji_1f64b);
-            sEmojisMap.Put(0x1f486, Resource.Drawable.emoji_1f486);
-            sEmojisMap.Put(0x1f487, Resource.Drawable.emoji_1f487);
-            sEmojisMap.Put(0x1f485, Resource.Drawable.emoji_1f485);
-            sEmojisMap.Put(0x1f470, Resource.Drawable.emoji_1f470);
-            sEmojisMap.Put(0x1f64e, Resource.Drawable.emoji_1f64e);
-            sEmojisMap.Put(0x1f64d, Resource.Drawable.emoji_1f64d);
-            sEmojisMap.Put(0x1f647, Resource.Drawable.emoji_1f647);
-            sEmojisMap.Put(0x1f3a9, Resource.Drawable.emoji_1f3a9);
-            sEmojisMap.Put(0x1f451, Resource.Drawable.emoji_1f451);
-            sEmojisMap.Put(0x1f452, Resource.Drawable.emoji_1f452);
-            sEmojisMap.Put(0x1f45f, Resource.Drawable.emoji_1f45f);
-            sEmojisMap.Put(0x1f45e, Resource.Drawable.emoji_1f45e);
-            sEmojisMap.Put(0x1f461, Resource.Drawable.emoji_1f461);
-            sEmojisMap.Put(0x1f460, Resource.Drawable.emoji_1f460);
-            sEmojisMap.Put(0x1f462, Resource.Drawable.emoji_1f462);
-            sEmojisMap.Put(0x1f455, Resource.Drawable.emoji_1f455);
-            sEmojisMap.Put(0x1f454, Resource.Drawable.emoji_1f454);
-            sEmojisMap.Put(0x1f45a, Resource.Drawable.emoji_1f45a);
-            sEmojisMap.Put(0x1f457, Resource.Drawable.emoji_1f457);
-            sEmojisMap.Put(0x1f3bd, Resource.Drawable.emoji_1f3bd);
-            sEmojisMap.Put(0x1f456, Resource.Drawable.emoji_1f456);
-            sEmojisMap.Put(0x1f458, Resource.Drawable.emoji_1f458);
-            sEmojisMap.Put(0x1f459, Resource.Drawable.emoji_1f459);
-            sEmojisMap.Put(0x1f4bc, Resource.Drawable.emoji_1f4bc);
-            sEmojisMap.Put(0x1f45c, Resource.Drawable.emoji_1f45c);
-            sEmojisMap.Put(0x1f45d, Resource.Drawable.emoji_1f45d);
-            sEmojisMap.Put(0x1f45b, Resource.Drawable.emoji_1f45b);
-            sEmojisMap.Put(0x1f453, Resource.Drawable.emoji_1f453);
-            sEmojisMap.Put(0x1f380, Resource.Drawable.emoji_1f380);
-            sEmojisMap.Put(0x1f302, Resource.Drawable.emoji_1f302);
-            sEmojisMap.Put(0x1f484, Resource.Drawable.emoji_1f484);
-            sEmojisMap.Put(0x1f49b, Resource.Drawable.emoji_1f49b);
-            sEmojisMap.Put(0x1f499, Resource.Drawable.emoji_1f499);
-            sEmojisMap.Put(0x1f49c, Resource.Drawable.emoji_1f49c);
-            sEmojisMap.Put(0x1f49a, Resource.Drawable.emoji_1f49a);
-            sEmojisMap.Put(0x2764,  Resource.Drawable.emoji_2764);
-            sEmojisMap.Put(0x1f494, Resource.Drawable.emoji_1f494);
-            sEmojisMap.Put(0x1f497, Resource.Drawable.emoji_1f497);
-            sEmojisMap.Put(0x1f493, Resource.Drawable.emoji_1f493);
-            sEmojisMap.Put(0x1f495, Resource.Drawable.emoji_1f495);
-            sEmojisMap.Put(0x1f496, Resource.Drawable.emoji_1f496);
-            sEmojisMap.Put(0x1f49e, Resource.Drawable.emoji_1f49e);
-            sEmojisMap.Put(0x1f498, Resource.Drawable.emoji_1f498);
-            sEmojisMap.Put(0x1f48c, Resource.Drawable.emoji_1f48c);
-            sEmojisMap.Put(0x1f48b, Resource.Drawable.emoji_1f48b);
-            sEmojisMap.Put(0x1f48d, Resource.Drawable.emoji_1f48d);
-            sEmojisMap.Put(0x1f48e, Resource.Drawable.emoji_1f48e);
-            sEmojisMap.Put(0x1f464, Resource.Drawable.emoji_1f464);
-            sEmojisMap.Put(0x1f465, Resource.Drawable.emoji_1f465);
-            sEmojisMap.Put(0x1f4ac, Resource.Drawable.emoji_1f4ac);
-            sEmojisMap.Put(0x1f463, Resource.Drawable.emoji_1f463);
-            sEmojisMap.Put(0x1f4ad, Resource.Drawable.emoji_1f4ad);
-
-            // Nature
-            sEmojisMap.Put(0x1f436, Resource.Drawable.emoji_1f436);
-            sEmojisMap.Put(0x1f43a, Resource.Drawable.emoji_1f43a);
-            sEmojisMap.Put(0x1f431, Resource.Drawable.emoji_1f431);
-            sEmojisMap.Put(0x1f42d, Resource.Drawable.emoji_1f42d);
-            sEmojisMap.Put(0x1f439, Resource.Drawable.emoji_1f439);
-            sEmojisMap.Put(0x1f430, Resource.Drawable.emoji_1f430);
-            sEmojisMap.Put(0x1f438, Resource.Drawable.emoji_1f438);
-            sEmojisMap.Put(0x1f42f, Resource.Drawable.emoji_1f42f);
-            sEmojisMap.Put(0x1f428, Resource.Drawable.emoji_1f428);
-            sEmojisMap.Put(0x1f43b, Resource.Drawable.emoji_1f43b);
-            sEmojisMap.Put(0x1f437, Resource.Drawable.emoji_1f437);
-            sEmojisMap.Put(0x1f43d, Resource.Drawable.emoji_1f43d);
-            sEmojisMap.Put(0x1f42e, Resource.Drawable.emoji_1f42e);
-            sEmojisMap.Put(0x1f417, Resource.Drawable.emoji_1f417);
-            sEmojisMap.Put(0x1f435, Resource.Drawable.emoji_1f435);
-            sEmojisMap.Put(0x1f412, Resource.Drawable.emoji_1f412);
-            sEmojisMap.Put(0x1f434, Resource.Drawable.emoji_1f434);
-            sEmojisMap.Put(0x1f411, Resource.Drawable.emoji_1f411);
-            sEmojisMap.Put(0x1f418, Resource.Drawable.emoji_1f418);
-            sEmojisMap.Put(0x1f43c, Resource.Drawable.emoji_1f43c);
-            sEmojisMap.Put(0x1f427, Resource.Drawable.emoji_1f427);
-            sEmojisMap.Put(0x1f426, Resource.Drawable.emoji_1f426);
-            sEmojisMap.Put(0x1f424, Resource.Drawable.emoji_1f424);
-            sEmojisMap.Put(0x1f425, Resource.Drawable.emoji_1f425);
-            sEmojisMap.Put(0x1f423, Resource.Drawable.emoji_1f423);
-            sEmojisMap.Put(0x1f414, Resource.Drawable.emoji_1f414);
-            sEmojisMap.Put(0x1f40d, Resource.Drawable.emoji_1f40d);
-            sEmojisMap.Put(0x1f422, Resource.Drawable.emoji_1f422);
-            sEmojisMap.Put(0x1f41b, Resource.Drawable.emoji_1f41b);
-            sEmojisMap.Put(0x1f41d, Resource.Drawable.emoji_1f41d);
-            sEmojisMap.Put(0x1f41c, Resource.Drawable.emoji_1f41c);
-            sEmojisMap.Put(0x1f41e, Resource.Drawable.emoji_1f41e);
-            sEmojisMap.Put(0x1f40c, Resource.Drawable.emoji_1f40c);
-            sEmojisMap.Put(0x1f419, Resource.Drawable.emoji_1f419);
-            sEmojisMap.Put(0x1f41a, Resource.Drawable.emoji_1f41a);
-            sEmojisMap.Put(0x1f420, Resource.Drawable.emoji_1f420);
-            sEmojisMap.Put(0x1f41f, Resource.Drawable.emoji_1f41f);
-            sEmojisMap.Put(0x1f42c, Resource.Drawable.emoji_1f42c);
-            sEmojisMap.Put(0x1f433, Resource.Drawable.emoji_1f433);
-            sEmojisMap.Put(0x1f40b, Resource.Drawable.emoji_1f40b);
-            sEmojisMap.Put(0x1f404, Resource.Drawable.emoji_1f404);
-            sEmojisMap.Put(0x1f40f, Resource.Drawable.emoji_1f40f);
-            sEmojisMap.Put(0x1f400, Resource.Drawable.emoji_1f400);
-            sEmojisMap.Put(0x1f403, Resource.Drawable.emoji_1f403);
-            sEmojisMap.Put(0x1f405, Resource.Drawable.emoji_1f405);
-            sEmojisMap.Put(0x1f407, Resource.Drawable.emoji_1f407);
-            sEmojisMap.Put(0x1f409, Resource.Drawable.emoji_1f409);
-            sEmojisMap.Put(0x1f40e, Resource.Drawable.emoji_1f40e);
-            sEmojisMap.Put(0x1f410, Resource.Drawable.emoji_1f410);
-            sEmojisMap.Put(0x1f413, Resource.Drawable.emoji_1f413);
-            sEmojisMap.Put(0x1f415, Resource.Drawable.emoji_1f415);
-            sEmojisMap.Put(0x1f416, Resource.Drawable.emoji_1f416);
-            sEmojisMap.Put(0x1f401, Resource.Drawable.emoji_1f401);
-            sEmojisMap.Put(0x1f402, Resource.Drawable.emoji_1f402);
-            sEmojisMap.Put(0x1f432, Resource.Drawable.emoji_1f432);
-            sEmojisMap.Put(0x1f421, Resource.Drawable.emoji_1f421);
-            sEmojisMap.Put(0x1f40a, Resource.Drawable.emoji_1f40a);
-            sEmojisMap.Put(0x1f42b, Resource.Drawable.emoji_1f42b);
-            sEmojisMap.Put(0x1f42a, Resource.Drawable.emoji_1f42a);
-            sEmojisMap.Put(0x1f406, Resource.Drawable.emoji_1f406);
-            sEmojisMap.Put(0x1f408, Resource.Drawable.emoji_1f408);
-            sEmojisMap.Put(0x1f429, Resource.Drawable.emoji_1f429);
-            sEmojisMap.Put(0x1f43e, Resource.Drawable.emoji_1f43e);
-            sEmojisMap.Put(0x1f490, Resource.Drawable.emoji_1f490);
-            sEmojisMap.Put(0x1f338, Resource.Drawable.emoji_1f338);
-            sEmojisMap.Put(0x1f337, Resource.Drawable.emoji_1f337);
-            sEmojisMap.Put(0x1f340, Resource.Drawable.emoji_1f340);
-            sEmojisMap.Put(0x1f339, Resource.Drawable.emoji_1f339);
-            sEmojisMap.Put(0x1f33b, Resource.Drawable.emoji_1f33b);
-            sEmojisMap.Put(0x1f33a, Resource.Drawable.emoji_1f33a);
-            sEmojisMap.Put(0x1f341, Resource.Drawable.emoji_1f341);
-            sEmojisMap.Put(0x1f343, Resource.Drawable.emoji_1f343);
-            sEmojisMap.Put(0x1f342, Resource.Drawable.emoji_1f342);
-            sEmojisMap.Put(0x1f33f, Resource.Drawable.emoji_1f33f);
-            sEmojisMap.Put(0x1f33e, Resource.Drawable.emoji_1f33e);
-            sEmojisMap.Put(0x1f344, Resource.Drawable.emoji_1f344);
-            sEmojisMap.Put(0x1f335, Resource.Drawable.emoji_1f335);
-            sEmojisMap.Put(0x1f334, Resource.Drawable.emoji_1f334);
-            sEmojisMap.Put(0x1f332, Resource.Drawable.emoji_1f332);
-            sEmojisMap.Put(0x1f333, Resource.Drawable.emoji_1f333);
-            sEmojisMap.Put(0x1f330, Resource.Drawable.emoji_1f330);
-            sEmojisMap.Put(0x1f331, Resource.Drawable.emoji_1f331);
-            sEmojisMap.Put(0x1f33c, Resource.Drawable.emoji_1f33c);
-            sEmojisMap.Put(0x1f310, Resource.Drawable.emoji_1f310);
-            sEmojisMap.Put(0x1f31e, Resource.Drawable.emoji_1f31e);
-            sEmojisMap.Put(0x1f31d, Resource.Drawable.emoji_1f31d);
-            sEmojisMap.Put(0x1f31a, Resource.Drawable.emoji_1f31a);
-            sEmojisMap.Put(0x1f311, Resource.Drawable.emoji_1f311);
-            sEmojisMap.Put(0x1f312, Resource.Drawable.emoji_1f312);
-            sEmojisMap.Put(0x1f313, Resource.Drawable.emoji_1f313);
-            sEmojisMap.Put(0x1f314, Resource.Drawable.emoji_1f314);
-            sEmojisMap.Put(0x1f315, Resource.Drawable.emoji_1f315);
-            sEmojisMap.Put(0x1f316, Resource.Drawable.emoji_1f316);
-            sEmojisMap.Put(0x1f317, Resource.Drawable.emoji_1f317);
-            sEmojisMap.Put(0x1f318, Resource.Drawable.emoji_1f318);
-            sEmojisMap.Put(0x1f31c, Resource.Drawable.emoji_1f31c);
-            sEmojisMap.Put(0x1f31b, Resource.Drawable.emoji_1f31b);
-            sEmojisMap.Put(0x1f319, Resource.Drawable.emoji_1f319);
-            sEmojisMap.Put(0x1f30d, Resource.Drawable.emoji_1f30d);
-            sEmojisMap.Put(0x1f30e, Resource.Drawable.emoji_1f30e);
-            sEmojisMap.Put(0x1f30f, Resource.Drawable.emoji_1f30f);
-            sEmojisMap.Put(0x1f30b, Resource.Drawable.emoji_1f30b);
-            sEmojisMap.Put(0x1f30c, Resource.Drawable.emoji_1f30c);
-            sEmojisMap.Put(0x1f320, Resource.Drawable.emoji_1f303); // TODO (rockerhieu) review this emoji
-            sEmojisMap.Put(0x2b50,  Resource.Drawable.emoji_2b50);
-            sEmojisMap.Put(0x2600,  Resource.Drawable.emoji_2600);
-            sEmojisMap.Put(0x26c5,  Resource.Drawable.emoji_26c5);
-            sEmojisMap.Put(0x2601,  Resource.Drawable.emoji_2601);
-            sEmojisMap.Put(0x26a1,  Resource.Drawable.emoji_26a1);
-            sEmojisMap.Put(0x2614,  Resource.Drawable.emoji_2614);
-            sEmojisMap.Put(0x2744,  Resource.Drawable.emoji_2744);
-            sEmojisMap.Put(0x26c4,  Resource.Drawable.emoji_26c4);
-            sEmojisMap.Put(0x1f300, Resource.Drawable.emoji_1f300);
-            sEmojisMap.Put(0x1f301, Resource.Drawable.emoji_1f301);
-            sEmojisMap.Put(0x1f308, Resource.Drawable.emoji_1f308);
-            sEmojisMap.Put(0x1f30a, Resource.Drawable.emoji_1f30a);
-
-            // Objects
-            sEmojisMap.Put(0x1f38d, Resource.Drawable.emoji_1f38d);
-            sEmojisMap.Put(0x1f49d, Resource.Drawable.emoji_1f49d);
-            sEmojisMap.Put(0x1f38e, Resource.Drawable.emoji_1f38e);
-            sEmojisMap.Put(0x1f392, Resource.Drawable.emoji_1f392);
-            sEmojisMap.Put(0x1f393, Resource.Drawable.emoji_1f393);
-            sEmojisMap.Put(0x1f38f, Resource.Drawable.emoji_1f38f);
-            sEmojisMap.Put(0x1f386, Resource.Drawable.emoji_1f386);
-            sEmojisMap.Put(0x1f387, Resource.Drawable.emoji_1f387);
-            sEmojisMap.Put(0x1f390, Resource.Drawable.emoji_1f390);
-            sEmojisMap.Put(0x1f391, Resource.Drawable.emoji_1f391);
-            sEmojisMap.Put(0x1f383, Resource.Drawable.emoji_1f383);
-            sEmojisMap.Put(0x1f47b, Resource.Drawable.emoji_1f47b);
-            sEmojisMap.Put(0x1f385, Resource.Drawable.emoji_1f385);
-            sEmojisMap.Put(0x1f384, Resource.Drawable.emoji_1f384);
-            sEmojisMap.Put(0x1f381, Resource.Drawable.emoji_1f381);
-            sEmojisMap.Put(0x1f38b, Resource.Drawable.emoji_1f38b);
-            sEmojisMap.Put(0x1f389, Resource.Drawable.emoji_1f389);
-            sEmojisMap.Put(0x1f38a, Resource.Drawable.emoji_1f38a);
-            sEmojisMap.Put(0x1f388, Resource.Drawable.emoji_1f388);
-            sEmojisMap.Put(0x1f38c, Resource.Drawable.emoji_1f38c);
-            sEmojisMap.Put(0x1f52e, Resource.Drawable.emoji_1f52e);
-            sEmojisMap.Put(0x1f3a5, Resource.Drawable.emoji_1f3a5);
-            sEmojisMap.Put(0x1f4f7, Resource.Drawable.emoji_1f4f7);
-            sEmojisMap.Put(0x1f4f9, Resource.Drawable.emoji_1f4f9);
-            sEmojisMap.Put(0x1f4fc, Resource.Drawable.emoji_1f4fc);
-            sEmojisMap.Put(0x1f4bf, Resource.Drawable.emoji_1f4bf);
-            sEmojisMap.Put(0x1f4c0, Resource.Drawable.emoji_1f4c0);
-            sEmojisMap.Put(0x1f4bd, Resource.Drawable.emoji_1f4bd);
-            sEmojisMap.Put(0x1f4be, Resource.Drawable.emoji_1f4be);
-            sEmojisMap.Put(0x1f4bb, Resource.Drawable.emoji_1f4bb);
-            sEmojisMap.Put(0x1f4f1, Resource.Drawable.emoji_1f4f1);
-            sEmojisMap.Put(0x260e,  Resource.Drawable.emoji_260e);
-            sEmojisMap.Put(0x1f4de, Resource.Drawable.emoji_1f4de);
-            sEmojisMap.Put(0x1f4df, Resource.Drawable.emoji_1f4df);
-            sEmojisMap.Put(0x1f4e0, Resource.Drawable.emoji_1f4e0);
-            sEmojisMap.Put(0x1f4e1, Resource.Drawable.emoji_1f4e1);
-            sEmojisMap.Put(0x1f4fa, Resource.Drawable.emoji_1f4fa);
-            sEmojisMap.Put(0x1f4fb, Resource.Drawable.emoji_1f4fb);
-            sEmojisMap.Put(0x1f50a, Resource.Drawable.emoji_1f50a);
-            sEmojisMap.Put(0x1f509, Resource.Drawable.emoji_1f509);
-            sEmojisMap.Put(0x1f508, Resource.Drawable.emoji_1f508); // TODO (rockerhieu): review this emoji
-            sEmojisMap.Put(0x1f507, Resource.Drawable.emoji_1f507);
-            sEmojisMap.Put(0x1f514, Resource.Drawable.emoji_1f514);
-            sEmojisMap.Put(0x1f515, Resource.Drawable.emoji_1f515);
-            sEmojisMap.Put(0x1f4e2, Resource.Drawable.emoji_1f4e2);
-            sEmojisMap.Put(0x1f4e3, Resource.Drawable.emoji_1f4e3);
-            sEmojisMap.Put(0x23f3,  Resource.Drawable.emoji_23f3);
-            sEmojisMap.Put(0x231b,  Resource.Drawable.emoji_231b);
-            sEmojisMap.Put(0x23f0,  Resource.Drawable.emoji_23f0);
-            sEmojisMap.Put(0x231a,  Resource.Drawable.emoji_231a);
-            sEmojisMap.Put(0x1f513, Resource.Drawable.emoji_1f513);
-            sEmojisMap.Put(0x1f512, Resource.Drawable.emoji_1f512);
-            sEmojisMap.Put(0x1f50f, Resource.Drawable.emoji_1f50f);
-            sEmojisMap.Put(0x1f510, Resource.Drawable.emoji_1f510);
-            sEmojisMap.Put(0x1f511, Resource.Drawable.emoji_1f511);
-            sEmojisMap.Put(0x1f50e, Resource.Drawable.emoji_1f50e);
-            sEmojisMap.Put(0x1f4a1, Resource.Drawable.emoji_1f4a1);
-            sEmojisMap.Put(0x1f526, Resource.Drawable.emoji_1f526);
-            sEmojisMap.Put(0x1f506, Resource.Drawable.emoji_1f506);
-            sEmojisMap.Put(0x1f505, Resource.Drawable.emoji_1f505);
-            sEmojisMap.Put(0x1f50c, Resource.Drawable.emoji_1f50c);
-            sEmojisMap.Put(0x1f50b, Resource.Drawable.emoji_1f50b);
-            sEmojisMap.Put(0x1f50d, Resource.Drawable.emoji_1f50d);
-            sEmojisMap.Put(0x1f6c1, Resource.Drawable.emoji_1f6c1);
-            sEmojisMap.Put(0x1f6c0, Resource.Drawable.emoji_1f6c0);
-            sEmojisMap.Put(0x1f6bf, Resource.Drawable.emoji_1f6bf);
-            sEmojisMap.Put(0x1f6bd, Resource.Drawable.emoji_1f6bd);
-            sEmojisMap.Put(0x1f527, Resource.Drawable.emoji_1f527);
-            sEmojisMap.Put(0x1f529, Resource.Drawable.emoji_1f529);
-            sEmojisMap.Put(0x1f528, Resource.Drawable.emoji_1f528);
-            sEmojisMap.Put(0x1f6aa, Resource.Drawable.emoji_1f6aa);
-            sEmojisMap.Put(0x1f6ac, Resource.Drawable.emoji_1f6ac);
-            sEmojisMap.Put(0x1f4a3, Resource.Drawable.emoji_1f4a3);
-            sEmojisMap.Put(0x1f52b, Resource.Drawable.emoji_1f52b);
-            sEmojisMap.Put(0x1f52a, Resource.Drawable.emoji_1f52a);
-            sEmojisMap.Put(0x1f48a, Resource.Drawable.emoji_1f48a);
-            sEmojisMap.Put(0x1f489, Resource.Drawable.emoji_1f489);
-            sEmojisMap.Put(0x1f4b0, Resource.Drawable.emoji_1f4b0);
-            sEmojisMap.Put(0x1f4b4, Resource.Drawable.emoji_1f4b4);
-            sEmojisMap.Put(0x1f4b5, Resource.Drawable.emoji_1f4b5);
-            sEmojisMap.Put(0x1f4b7, Resource.Drawable.emoji_1f4b7);
-            sEmojisMap.Put(0x1f4b6, Resource.Drawable.emoji_1f4b6);
-            sEmojisMap.Put(0x1f4b3, Resource.Drawable.emoji_1f4b3);
-            sEmojisMap.Put(0x1f4b8, Resource.Drawable.emoji_1f4b8);
-            sEmojisMap.Put(0x1f4f2, Resource.Drawable.emoji_1f4f2);
-            sEmojisMap.Put(0x1f4e7, Resource.Drawable.emoji_1f4e7);
-            sEmojisMap.Put(0x1f4e5, Resource.Drawable.emoji_1f4e5);
-            sEmojisMap.Put(0x1f4e4, Resource.Drawable.emoji_1f4e4);
-            sEmojisMap.Put(0x2709,  Resource.Drawable.emoji_2709);
-            sEmojisMap.Put(0x1f4e9, Resource.Drawable.emoji_1f4e9);
-            sEmojisMap.Put(0x1f4e8, Resource.Drawable.emoji_1f4e8);
-            sEmojisMap.Put(0x1f4ef, Resource.Drawable.emoji_1f4ef);
-            sEmojisMap.Put(0x1f4eb, Resource.Drawable.emoji_1f4eb);
-            sEmojisMap.Put(0x1f4ea, Resource.Drawable.emoji_1f4ea);
-            sEmojisMap.Put(0x1f4ec, Resource.Drawable.emoji_1f4ec);
-            sEmojisMap.Put(0x1f4ed, Resource.Drawable.emoji_1f4ed);
-            sEmojisMap.Put(0x1f4ee, Resource.Drawable.emoji_1f4ee);
-            sEmojisMap.Put(0x1f4e6, Resource.Drawable.emoji_1f4e6);
-            sEmojisMap.Put(0x1f4dd, Resource.Drawable.emoji_1f4dd);
-            sEmojisMap.Put(0x1f4c4, Resource.Drawable.emoji_1f4c4);
-            sEmojisMap.Put(0x1f4c3, Resource.Drawable.emoji_1f4c3);
-            sEmojisMap.Put(0x1f4d1, Resource.Drawable.emoji_1f4d1);
-            sEmojisMap.Put(0x1f4ca, Resource.Drawable.emoji_1f4ca);
-            sEmojisMap.Put(0x1f4c8, Resource.Drawable.emoji_1f4c8);
-            sEmojisMap.Put(0x1f4c9, Resource.Drawable.emoji_1f4c9);
-            sEmojisMap.Put(0x1f4dc, Resource.Drawable.emoji_1f4dc);
-            sEmojisMap.Put(0x1f4cb, Resource.Drawable.emoji_1f4cb);
-            sEmojisMap.Put(0x1f4c5, Resource.Drawable.emoji_1f4c5);
-            sEmojisMap.Put(0x1f4c6, Resource.Drawable.emoji_1f4c6);
-            sEmojisMap.Put(0x1f4c7, Resource.Drawable.emoji_1f4c7);
-            sEmojisMap.Put(0x1f4c1, Resource.Drawable.emoji_1f4c1);
-            sEmojisMap.Put(0x1f4c2, Resource.Drawable.emoji_1f4c2);
-            sEmojisMap.Put(0x2702,  Resource.Drawable.emoji_2702);
-            sEmojisMap.Put(0x1f4cc, Resource.Drawable.emoji_1f4cc);
-            sEmojisMap.Put(0x1f4ce, Resource.Drawable.emoji_1f4ce);
-            sEmojisMap.Put(0x2712,  Resource.Drawable.emoji_2712);
-            sEmojisMap.Put(0x270f,  Resource.Drawable.emoji_270f);
-            sEmojisMap.Put(0x1f4cf, Resource.Drawable.emoji_1f4cf);
-            sEmojisMap.Put(0x1f4d0, Resource.Drawable.emoji_1f4d0);
-            sEmojisMap.Put(0x1f4d5, Resource.Drawable.emoji_1f4d5);
-            sEmojisMap.Put(0x1f4d7, Resource.Drawable.emoji_1f4d7);
-            sEmojisMap.Put(0x1f4d8, Resource.Drawable.emoji_1f4d8);
-            sEmojisMap.Put(0x1f4d9, Resource.Drawable.emoji_1f4d9);
-            sEmojisMap.Put(0x1f4d3, Resource.Drawable.emoji_1f4d3);
-            sEmojisMap.Put(0x1f4d4, Resource.Drawable.emoji_1f4d4);
-            sEmojisMap.Put(0x1f4d2, Resource.Drawable.emoji_1f4d2);
-            sEmojisMap.Put(0x1f4da, Resource.Drawable.emoji_1f4da);
-            sEmojisMap.Put(0x1f4d6, Resource.Drawable.emoji_1f4d6);
-            sEmojisMap.Put(0x1f516, Resource.Drawable.emoji_1f516);
-            sEmojisMap.Put(0x1f4db, Resource.Drawable.emoji_1f4db);
-            sEmojisMap.Put(0x1f52c, Resource.Drawable.emoji_1f52c);
-            sEmojisMap.Put(0x1f52d, Resource.Drawable.emoji_1f52d);
-            sEmojisMap.Put(0x1f4f0, Resource.Drawable.emoji_1f4f0);
-            sEmojisMap.Put(0x1f3a8, Resource.Drawable.emoji_1f3a8);
-            sEmojisMap.Put(0x1f3ac, Resource.Drawable.emoji_1f3ac);
-            sEmojisMap.Put(0x1f3a4, Resource.Drawable.emoji_1f3a4);
-            sEmojisMap.Put(0x1f3a7, Resource.Drawable.emoji_1f3a7);
-            sEmojisMap.Put(0x1f3bc, Resource.Drawable.emoji_1f3bc);
-            sEmojisMap.Put(0x1f3b5, Resource.Drawable.emoji_1f3b5);
-            sEmojisMap.Put(0x1f3b6, Resource.Drawable.emoji_1f3b6);
-            sEmojisMap.Put(0x1f3b9, Resource.Drawable.emoji_1f3b9);
-            sEmojisMap.Put(0x1f3bb, Resource.Drawable.emoji_1f3bb);
-            sEmojisMap.Put(0x1f3ba, Resource.Drawable.emoji_1f3ba);
-            sEmojisMap.Put(0x1f3b7, Resource.Drawable.emoji_1f3b7);
-            sEmojisMap.Put(0x1f3b8, Resource.Drawable.emoji_1f3b8);
-            sEmojisMap.Put(0x1f47e, Resource.Drawable.emoji_1f47e);
-            sEmojisMap.Put(0x1f3ae, Resource.Drawable.emoji_1f3ae);
-            sEmojisMap.Put(0x1f0cf, Resource.Drawable.emoji_1f0cf);
-            sEmojisMap.Put(0x1f3b4, Resource.Drawable.emoji_1f3b4);
-            sEmojisMap.Put(0x1f004, Resource.Drawable.emoji_1f004);
-            sEmojisMap.Put(0x1f3b2, Resource.Drawable.emoji_1f3b2);
-            sEmojisMap.Put(0x1f3af, Resource.Drawable.emoji_1f3af);
-            sEmojisMap.Put(0x1f3c8, Resource.Drawable.emoji_1f3c8);
-            sEmojisMap.Put(0x1f3c0, Resource.Drawable.emoji_1f3c0);
-            sEmojisMap.Put(0x26bd,  Resource.Drawable.emoji_26bd);
-            sEmojisMap.Put(0x26be,  Resource.Drawable.emoji_26be);
-            sEmojisMap.Put(0x1f3be, Resource.Drawable.emoji_1f3be);
-            sEmojisMap.Put(0x1f3b1, Resource.Drawable.emoji_1f3b1);
-            sEmojisMap.Put(0x1f3c9, Resource.Drawable.emoji_1f3c9);
-            sEmojisMap.Put(0x1f3b3, Resource.Drawable.emoji_1f3b3);
-            sEmojisMap.Put(0x26f3,  Resource.Drawable.emoji_26f3);
-            sEmojisMap.Put(0x1f6b5, Resource.Drawable.emoji_1f6b5);
-            sEmojisMap.Put(0x1f6b4, Resource.Drawable.emoji_1f6b4);
-            sEmojisMap.Put(0x1f3c1, Resource.Drawable.emoji_1f3c1);
-            sEmojisMap.Put(0x1f3c7, Resource.Drawable.emoji_1f3c7);
-            sEmojisMap.Put(0x1f3c6, Resource.Drawable.emoji_1f3c6);
-            sEmojisMap.Put(0x1f3bf, Resource.Drawable.emoji_1f3bf);
-            sEmojisMap.Put(0x1f3c2, Resource.Drawable.emoji_1f3c2);
-            sEmojisMap.Put(0x1f3ca, Resource.Drawable.emoji_1f3ca);
-            sEmojisMap.Put(0x1f3c4, Resource.Drawable.emoji_1f3c4);
-            sEmojisMap.Put(0x1f3a3, Resource.Drawable.emoji_1f3a3);
-            sEmojisMap.Put(0x2615,  Resource.Drawable.emoji_2615);
-            sEmojisMap.Put(0x1f375, Resource.Drawable.emoji_1f375);
-            sEmojisMap.Put(0x1f376, Resource.Drawable.emoji_1f376);
-            sEmojisMap.Put(0x1f37c, Resource.Drawable.emoji_1f37c);
-            sEmojisMap.Put(0x1f37a, Resource.Drawable.emoji_1f37a);
-            sEmojisMap.Put(0x1f37b, Resource.Drawable.emoji_1f37b);
-            sEmojisMap.Put(0x1f378, Resource.Drawable.emoji_1f378);
-            sEmojisMap.Put(0x1f379, Resource.Drawable.emoji_1f379);
-            sEmojisMap.Put(0x1f377, Resource.Drawable.emoji_1f377);
-            sEmojisMap.Put(0x1f374, Resource.Drawable.emoji_1f374);
-            sEmojisMap.Put(0x1f355, Resource.Drawable.emoji_1f355);
-            sEmojisMap.Put(0x1f354, Resource.Drawable.emoji_1f354);
-            sEmojisMap.Put(0x1f35f, Resource.Drawable.emoji_1f35f);
-            sEmojisMap.Put(0x1f357, Resource.Drawable.emoji_1f357);
-            sEmojisMap.Put(0x1f356, Resource.Drawable.emoji_1f356);
-            sEmojisMap.Put(0x1f35d, Resource.Drawable.emoji_1f35d);
-            sEmojisMap.Put(0x1f35b, Resource.Drawable.emoji_1f35b);
-            sEmojisMap.Put(0x1f364, Resource.Drawable.emoji_1f364);
-            sEmojisMap.Put(0x1f371, Resource.Drawable.emoji_1f371);
-            sEmojisMap.Put(0x1f363, Resource.Drawable.emoji_1f363);
-            sEmojisMap.Put(0x1f365, Resource.Drawable.emoji_1f365);
-            sEmojisMap.Put(0x1f359, Resource.Drawable.emoji_1f359);
-            sEmojisMap.Put(0x1f358, Resource.Drawable.emoji_1f358);
-            sEmojisMap.Put(0x1f35a, Resource.Drawable.emoji_1f35a);
-            sEmojisMap.Put(0x1f35c, Resource.Drawable.emoji_1f35c);
-            sEmojisMap.Put(0x1f372, Resource.Drawable.emoji_1f372);
-            sEmojisMap.Put(0x1f362, Resource.Drawable.emoji_1f362);
-            sEmojisMap.Put(0x1f361, Resource.Drawable.emoji_1f361);
-            sEmojisMap.Put(0x1f373, Resource.Drawable.emoji_1f373);
-            sEmojisMap.Put(0x1f35e, Resource.Drawable.emoji_1f35e);
-            sEmojisMap.Put(0x1f369, Resource.Drawable.emoji_1f369);
-            sEmojisMap.Put(0x1f36e, Resource.Drawable.emoji_1f36e);
-            sEmojisMap.Put(0x1f366, Resource.Drawable.emoji_1f366);
-            sEmojisMap.Put(0x1f368, Resource.Drawable.emoji_1f368);
-            sEmojisMap.Put(0x1f367, Resource.Drawable.emoji_1f367);
-            sEmojisMap.Put(0x1f382, Resource.Drawable.emoji_1f382);
-            sEmojisMap.Put(0x1f370, Resource.Drawable.emoji_1f370);
-            sEmojisMap.Put(0x1f36a, Resource.Drawable.emoji_1f36a);
-            sEmojisMap.Put(0x1f36b, Resource.Drawable.emoji_1f36b);
-            sEmojisMap.Put(0x1f36c, Resource.Drawable.emoji_1f36c);
-            sEmojisMap.Put(0x1f36d, Resource.Drawable.emoji_1f36d);
-            sEmojisMap.Put(0x1f36f, Resource.Drawable.emoji_1f36f);
-            sEmojisMap.Put(0x1f34e, Resource.Drawable.emoji_1f34e);
-            sEmojisMap.Put(0x1f34f, Resource.Drawable.emoji_1f34f);
-            sEmojisMap.Put(0x1f34a, Resource.Drawable.emoji_1f34a);
-            sEmojisMap.Put(0x1f34b, Resource.Drawable.emoji_1f34b);
-            sEmojisMap.Put(0x1f352, Resource.Drawable.emoji_1f352);
-            sEmojisMap.Put(0x1f347, Resource.Drawable.emoji_1f347);
-            sEmojisMap.Put(0x1f349, Resource.Drawable.emoji_1f349);
-            sEmojisMap.Put(0x1f353, Resource.Drawable.emoji_1f353);
-            sEmojisMap.Put(0x1f351, Resource.Drawable.emoji_1f351);
-            sEmojisMap.Put(0x1f348, Resource.Drawable.emoji_1f348);
-            sEmojisMap.Put(0x1f34c, Resource.Drawable.emoji_1f34c);
-            sEmojisMap.Put(0x1f350, Resource.Drawable.emoji_1f350);
-            sEmojisMap.Put(0x1f34d, Resource.Drawable.emoji_1f34d);
-            sEmojisMap.Put(0x1f360, Resource.Drawable.emoji_1f360);
-            sEmojisMap.Put(0x1f346, Resource.Drawable.emoji_1f346);
-            sEmojisMap.Put(0x1f345, Resource.Drawable.emoji_1f345);
-            sEmojisMap.Put(0x1f33d, Resource.Drawable.emoji_1f33d);
-
-            // Places
-            sEmojisMap.Put(0x1f3e0, Resource.Drawable.emoji_1f3e0);
-            sEmojisMap.Put(0x1f3e1, Resource.Drawable.emoji_1f3e1);
-            sEmojisMap.Put(0x1f3eb, Resource.Drawable.emoji_1f3eb);
-            sEmojisMap.Put(0x1f3e2, Resource.Drawable.emoji_1f3e2);
-            sEmojisMap.Put(0x1f3e3, Resource.Drawable.emoji_1f3e3);
-            sEmojisMap.Put(0x1f3e5, Resource.Drawable.emoji_1f3e5);
-            sEmojisMap.Put(0x1f3e6, Resource.Drawable.emoji_1f3e6);
-            sEmojisMap.Put(0x1f3ea, Resource.Drawable.emoji_1f3ea);
-            sEmojisMap.Put(0x1f3e9, Resource.Drawable.emoji_1f3e9);
-            sEmojisMap.Put(0x1f3e8, Resource.Drawable.emoji_1f3e8);
-            sEmojisMap.Put(0x1f492, Resource.Drawable.emoji_1f492);
-            sEmojisMap.Put(0x26ea,  Resource.Drawable.emoji_26ea);
-            sEmojisMap.Put(0x1f3ec, Resource.Drawable.emoji_1f3ec);
-            sEmojisMap.Put(0x1f3e4, Resource.Drawable.emoji_1f3e4);
-            sEmojisMap.Put(0x1f307, Resource.Drawable.emoji_1f307);
-            sEmojisMap.Put(0x1f306, Resource.Drawable.emoji_1f306);
-            sEmojisMap.Put(0x1f3ef, Resource.Drawable.emoji_1f3ef);
-            sEmojisMap.Put(0x1f3f0, Resource.Drawable.emoji_1f3f0);
-            sEmojisMap.Put(0x26fa,  Resource.Drawable.emoji_26fa);
-            sEmojisMap.Put(0x1f3ed, Resource.Drawable.emoji_1f3ed);
-            sEmojisMap.Put(0x1f5fc, Resource.Drawable.emoji_1f5fc);
-            sEmojisMap.Put(0x1f5fe, Resource.Drawable.emoji_1f5fe);
-            sEmojisMap.Put(0x1f5fb, Resource.Drawable.emoji_1f5fb);
-            sEmojisMap.Put(0x1f304, Resource.Drawable.emoji_1f304);
-            sEmojisMap.Put(0x1f305, Resource.Drawable.emoji_1f305);
-            sEmojisMap.Put(0x1f303, Resource.Drawable.emoji_1f303);
-            sEmojisMap.Put(0x1f5fd, Resource.Drawable.emoji_1f5fd);
-            sEmojisMap.Put(0x1f309, Resource.Drawable.emoji_1f309);
-            sEmojisMap.Put(0x1f3a0, Resource.Drawable.emoji_1f3a0);
-            sEmojisMap.Put(0x1f3a1, Resource.Drawable.emoji_1f3a1);
-            sEmojisMap.Put(0x26f2,  Resource.Drawable.emoji_26f2);
-            sEmojisMap.Put(0x1f3a2, Resource.Drawable.emoji_1f3a2);
-            sEmojisMap.Put(0x1f6a2, Resource.Drawable.emoji_1f6a2);
-            sEmojisMap.Put(0x26f5,  Resource.Drawable.emoji_26f5);
-            sEmojisMap.Put(0x1f6a4, Resource.Drawable.emoji_1f6a4);
-            sEmojisMap.Put(0x1f6a3, Resource.Drawable.emoji_1f6a3);
-            sEmojisMap.Put(0x2693,  Resource.Drawable.emoji_2693);
-            sEmojisMap.Put(0x1f680, Resource.Drawable.emoji_1f680);
-            sEmojisMap.Put(0x2708,  Resource.Drawable.emoji_2708);
-            sEmojisMap.Put(0x1f4ba, Resource.Drawable.emoji_1f4ba);
-            sEmojisMap.Put(0x1f681, Resource.Drawable.emoji_1f681);
-            sEmojisMap.Put(0x1f682, Resource.Drawable.emoji_1f682);
-            sEmojisMap.Put(0x1f68a, Resource.Drawable.emoji_1f68a);
-            sEmojisMap.Put(0x1f689, Resource.Drawable.emoji_1f689);
-            sEmojisMap.Put(0x1f69e, Resource.Drawable.emoji_1f69e);
-            sEmojisMap.Put(0x1f686, Resource.Drawable.emoji_1f686);
-            sEmojisMap.Put(0x1f684, Resource.Drawable.emoji_1f684);
-            sEmojisMap.Put(0x1f685, Resource.Drawable.emoji_1f685);
-            sEmojisMap.Put(0x1f688, Resource.Drawable.emoji_1f688);
-            sEmojisMap.Put(0x1f687, Resource.Drawable.emoji_1f687);
-            sEmojisMap.Put(0x1f69d, Resource.Drawable.emoji_1f69d);
-            sEmojisMap.Put(0x1f68b, Resource.Drawable.emoji_1f68b); // TODO (rockerhieu) review this emoji
-            sEmojisMap.Put(0x1f683, Resource.Drawable.emoji_1f683);
-            sEmojisMap.Put(0x1f68e, Resource.Drawable.emoji_1f68e);
-            sEmojisMap.Put(0x1f68c, Resource.Drawable.emoji_1f68c);
-            sEmojisMap.Put(0x1f68d, Resource.Drawable.emoji_1f68d);
-            sEmojisMap.Put(0x1f699, Resource.Drawable.emoji_1f699);
-            sEmojisMap.Put(0x1f698, Resource.Drawable.emoji_1f698);
-            sEmojisMap.Put(0x1f697, Resource.Drawable.emoji_1f697);
-            sEmojisMap.Put(0x1f695, Resource.Drawable.emoji_1f695);
-            sEmojisMap.Put(0x1f696, Resource.Drawable.emoji_1f696);
-            sEmojisMap.Put(0x1f69b, Resource.Drawable.emoji_1f69b);
-            sEmojisMap.Put(0x1f69a, Resource.Drawable.emoji_1f69a);
-            sEmojisMap.Put(0x1f6a8, Resource.Drawable.emoji_1f6a8);
-            sEmojisMap.Put(0x1f693, Resource.Drawable.emoji_1f693);
-            sEmojisMap.Put(0x1f694, Resource.Drawable.emoji_1f694);
-            sEmojisMap.Put(0x1f692, Resource.Drawable.emoji_1f692);
-            sEmojisMap.Put(0x1f691, Resource.Drawable.emoji_1f691);
-            sEmojisMap.Put(0x1f690, Resource.Drawable.emoji_1f690);
-            sEmojisMap.Put(0x1f6b2, Resource.Drawable.emoji_1f6b2);
-            sEmojisMap.Put(0x1f6a1, Resource.Drawable.emoji_1f6a1);
-            sEmojisMap.Put(0x1f69f, Resource.Drawable.emoji_1f69f);
-            sEmojisMap.Put(0x1f6a0, Resource.Drawable.emoji_1f6a0);
-            sEmojisMap.Put(0x1f69c, Resource.Drawable.emoji_1f69c);
-            sEmojisMap.Put(0x1f488, Resource.Drawable.emoji_1f488);
-            sEmojisMap.Put(0x1f68f, Resource.Drawable.emoji_1f68f);
-            sEmojisMap.Put(0x1f3ab, Resource.Drawable.emoji_1f3ab);
-            sEmojisMap.Put(0x1f6a6, Resource.Drawable.emoji_1f6a6);
-            sEmojisMap.Put(0x1f6a5, Resource.Drawable.emoji_1f6a5);
-            sEmojisMap.Put(0x26a0,  Resource.Drawable.emoji_26a0);
-            sEmojisMap.Put(0x1f6a7, Resource.Drawable.emoji_1f6a7);
-            sEmojisMap.Put(0x1f530, Resource.Drawable.emoji_1f530);
-            sEmojisMap.Put(0x26fd,  Resource.Drawable.emoji_26fd);
-            sEmojisMap.Put(0x1f3ee, Resource.Drawable.emoji_1f3ee);
-            sEmojisMap.Put(0x1f3b0, Resource.Drawable.emoji_1f3b0);
-            sEmojisMap.Put(0x2668,  Resource.Drawable.emoji_2668);
-            sEmojisMap.Put(0x1f5ff, Resource.Drawable.emoji_1f5ff);
-            sEmojisMap.Put(0x1f3aa, Resource.Drawable.emoji_1f3aa);
-            sEmojisMap.Put(0x1f3ad, Resource.Drawable.emoji_1f3ad);
-            sEmojisMap.Put(0x1f4cd, Resource.Drawable.emoji_1f4cd);
-            sEmojisMap.Put(0x1f6a9, Resource.Drawable.emoji_1f6a9);
-
-            //        Emoji.fromChars("\ud83c\uddef\ud83c\uddf5");
-            //        Emoji.fromChars("\ud83c\uddf0\ud83c\uddf7");
-            //        Emoji.fromChars("\ud83c\udde9\ud83c\uddea");
-            //        Emoji.fromChars("\ud83c\udde8\ud83c\uddf3");
-            //        Emoji.fromChars("\ud83c\uddfa\ud83c\uddf8");
-            //        Emoji.fromChars("\ud83c\uddeb\ud83c\uddf7");
-            //        Emoji.fromChars("\ud83c\uddea\ud83c\uddf8");
-            //        Emoji.fromChars("\ud83c\uddee\ud83c\uddf9");
-            //        Emoji.fromChars("\ud83c\uddf7\ud83c\uddfa");
-            //        Emoji.fromChars("\ud83c\uddec\ud83c\udde7");
-
-            // Symbols
-            //        Emoji.fromChars("\u0031\u20e3"),
-            //        Emoji.fromChars("\u0032\u20e3"),
-            //        Emoji.fromChars("\u0033\u20e3"),
-            //        Emoji.fromChars("\u0034\u20e3"),
-            //        Emoji.fromChars("\u0035\u20e3"),
-            //        Emoji.fromChars("\u0036\u20e3"),
-            //        Emoji.fromChars("\u0037\u20e3"),
-            //        Emoji.fromChars("\u0038\u20e3"),
-            //        Emoji.fromChars("\u0039\u20e3"),
-            //        Emoji.fromChars("\u0030\u20e3"),
-            sEmojisMap.Put(0x1f51f, Resource.Drawable.emoji_1f51f);
-            sEmojisMap.Put(0x1f522, Resource.Drawable.emoji_1f522);
-            //        Emoji.fromChars("\u0023\u20e3"),
-            sEmojisMap.Put(0x1f523, Resource.Drawable.emoji_1f523);
-            sEmojisMap.Put(0x2b06, Resource.Drawable.emoji_2b06);
-            sEmojisMap.Put(0x2b07, Resource.Drawable.emoji_2b07);
-            sEmojisMap.Put(0x2b05, Resource.Drawable.emoji_2b05);
-            sEmojisMap.Put(0x27a1, Resource.Drawable.emoji_27a1);
-            sEmojisMap.Put(0x1f520, Resource.Drawable.emoji_1f520);
-            sEmojisMap.Put(0x1f521, Resource.Drawable.emoji_1f521);
-            sEmojisMap.Put(0x1f524, Resource.Drawable.emoji_1f524);
-            sEmojisMap.Put(0x2197, Resource.Drawable.emoji_2197);
-            sEmojisMap.Put(0x2196, Resource.Drawable.emoji_2196);
-            sEmojisMap.Put(0x2198, Resource.Drawable.emoji_2198);
-            sEmojisMap.Put(0x2199, Resource.Drawable.emoji_2199);
-            sEmojisMap.Put(0x2194, Resource.Drawable.emoji_2194);
-            sEmojisMap.Put(0x2195, Resource.Drawable.emoji_2195);
-            sEmojisMap.Put(0x1f504, Resource.Drawable.emoji_1f504);
-            sEmojisMap.Put(0x25c0, Resource.Drawable.emoji_25c0);
-            sEmojisMap.Put(0x25b6, Resource.Drawable.emoji_25b6);
-            sEmojisMap.Put(0x1f53c, Resource.Drawable.emoji_1f53c);
-            sEmojisMap.Put(0x1f53d, Resource.Drawable.emoji_1f53d);
-            sEmojisMap.Put(0x21a9, Resource.Drawable.emoji_21a9);
-            sEmojisMap.Put(0x21aa, Resource.Drawable.emoji_21aa);
-            sEmojisMap.Put(0x2139, Resource.Drawable.emoji_2139);
-            sEmojisMap.Put(0x23ea, Resource.Drawable.emoji_23ea);
-            sEmojisMap.Put(0x23e9, Resource.Drawable.emoji_23e9);
-            sEmojisMap.Put(0x23eb, Resource.Drawable.emoji_23eb);
-            sEmojisMap.Put(0x23ec, Resource.Drawable.emoji_23ec);
-            sEmojisMap.Put(0x2935, Resource.Drawable.emoji_2935);
-            sEmojisMap.Put(0x2934, Resource.Drawable.emoji_2934);
-            sEmojisMap.Put(0x1f197, Resource.Drawable.emoji_1f197);
-            sEmojisMap.Put(0x1f500, Resource.Drawable.emoji_1f500);
-            sEmojisMap.Put(0x1f501, Resource.Drawable.emoji_1f501);
-            sEmojisMap.Put(0x1f502, Resource.Drawable.emoji_1f502);
-            sEmojisMap.Put(0x1f195, Resource.Drawable.emoji_1f195);
-            sEmojisMap.Put(0x1f199, Resource.Drawable.emoji_1f199);
-            sEmojisMap.Put(0x1f192, Resource.Drawable.emoji_1f192);
-            sEmojisMap.Put(0x1f193, Resource.Drawable.emoji_1f193);
-            sEmojisMap.Put(0x1f196, Resource.Drawable.emoji_1f196);
-            sEmojisMap.Put(0x1f4f6, Resource.Drawable.emoji_1f4f6);
-            sEmojisMap.Put(0x1f3a6, Resource.Drawable.emoji_1f3a6);
-            sEmojisMap.Put(0x1f201, Resource.Drawable.emoji_1f201);
-            sEmojisMap.Put(0x1f22f, Resource.Drawable.emoji_1f22f);
-            sEmojisMap.Put(0x1f233, Resource.Drawable.emoji_1f233);
-            sEmojisMap.Put(0x1f235, Resource.Drawable.emoji_1f235);
-            sEmojisMap.Put(0x1f234, Resource.Drawable.emoji_1f234);
-            sEmojisMap.Put(0x1f232, Resource.Drawable.emoji_1f232);
-            sEmojisMap.Put(0x1f250, Resource.Drawable.emoji_1f250);
-            sEmojisMap.Put(0x1f239, Resource.Drawable.emoji_1f239);
-            sEmojisMap.Put(0x1f23a, Resource.Drawable.emoji_1f23a);
-            sEmojisMap.Put(0x1f236, Resource.Drawable.emoji_1f236);
-            sEmojisMap.Put(0x1f21a, Resource.Drawable.emoji_1f21a);
-            sEmojisMap.Put(0x1f6bb, Resource.Drawable.emoji_1f6bb);
-            sEmojisMap.Put(0x1f6b9, Resource.Drawable.emoji_1f6b9);
-            sEmojisMap.Put(0x1f6ba, Resource.Drawable.emoji_1f6ba);
-            sEmojisMap.Put(0x1f6bc, Resource.Drawable.emoji_1f6bc);
-            sEmojisMap.Put(0x1f6be, Resource.Drawable.emoji_1f6be);
-            sEmojisMap.Put(0x1f6b0, Resource.Drawable.emoji_1f6b0);
-            sEmojisMap.Put(0x1f6ae, Resource.Drawable.emoji_1f6ae);
-            sEmojisMap.Put(0x1f17f, Resource.Drawable.emoji_1f17f);
-            sEmojisMap.Put(0x267f, Resource.Drawable.emoji_267f);
-            sEmojisMap.Put(0x1f6ad, Resource.Drawable.emoji_1f6ad);
-            sEmojisMap.Put(0x1f237, Resource.Drawable.emoji_1f237);
-            sEmojisMap.Put(0x1f238, Resource.Drawable.emoji_1f238);
-            sEmojisMap.Put(0x1f202, Resource.Drawable.emoji_1f202);
-            sEmojisMap.Put(0x24c2, Resource.Drawable.emoji_24c2);
-            sEmojisMap.Put(0x1f6c2, Resource.Drawable.emoji_1f6c2);
-            sEmojisMap.Put(0x1f6c4, Resource.Drawable.emoji_1f6c4);
-            sEmojisMap.Put(0x1f6c5, Resource.Drawable.emoji_1f6c5);
-            sEmojisMap.Put(0x1f6c3, Resource.Drawable.emoji_1f6c3);
-            sEmojisMap.Put(0x1f251, Resource.Drawable.emoji_1f251);
-            sEmojisMap.Put(0x3299, Resource.Drawable.emoji_3299);
-            sEmojisMap.Put(0x3297, Resource.Drawable.emoji_3297);
-            sEmojisMap.Put(0x1f191, Resource.Drawable.emoji_1f191);
-            sEmojisMap.Put(0x1f198, Resource.Drawable.emoji_1f198);
-            sEmojisMap.Put(0x1f194, Resource.Drawable.emoji_1f194);
-            sEmojisMap.Put(0x1f6ab, Resource.Drawable.emoji_1f6ab);
-            sEmojisMap.Put(0x1f51e, Resource.Drawable.emoji_1f51e);
-            sEmojisMap.Put(0x1f4f5, Resource.Drawable.emoji_1f4f5);
-            sEmojisMap.Put(0x1f6af, Resource.Drawable.emoji_1f6af);
-            sEmojisMap.Put(0x1f6b1, Resource.Drawable.emoji_1f6b1);
-            sEmojisMap.Put(0x1f6b3, Resource.Drawable.emoji_1f6b3);
-            sEmojisMap.Put(0x1f6b7, Resource.Drawable.emoji_1f6b7);
-            sEmojisMap.Put(0x1f6b8, Resource.Drawable.emoji_1f6b8);
-            sEmojisMap.Put(0x26d4, Resource.Drawable.emoji_26d4);
-            sEmojisMap.Put(0x2733, Resource.Drawable.emoji_2733);
-            sEmojisMap.Put(0x2747, Resource.Drawable.emoji_2747);
-            sEmojisMap.Put(0x274e, Resource.Drawable.emoji_274e);
-            sEmojisMap.Put(0x2705, Resource.Drawable.emoji_2705);
-            sEmojisMap.Put(0x2734, Resource.Drawable.emoji_2734);
-            sEmojisMap.Put(0x1f49f, Resource.Drawable.emoji_1f49f);
-            sEmojisMap.Put(0x1f19a, Resource.Drawable.emoji_1f19a);
-            sEmojisMap.Put(0x1f4f3, Resource.Drawable.emoji_1f4f3);
-            sEmojisMap.Put(0x1f4f4, Resource.Drawable.emoji_1f4f4);
-            sEmojisMap.Put(0x1f170, Resource.Drawable.emoji_1f170);
-            sEmojisMap.Put(0x1f171, Resource.Drawable.emoji_1f171);
-            sEmojisMap.Put(0x1f18e, Resource.Drawable.emoji_1f18e);
-            sEmojisMap.Put(0x1f17e, Resource.Drawable.emoji_1f17e);
-            sEmojisMap.Put(0x1f4a0, Resource.Drawable.emoji_1f4a0);
-            sEmojisMap.Put(0x27bf, Resource.Drawable.emoji_27bf);
-            sEmojisMap.Put(0x267b, Resource.Drawable.emoji_267b);
-            sEmojisMap.Put(0x2648, Resource.Drawable.emoji_2648);
-            sEmojisMap.Put(0x2649, Resource.Drawable.emoji_2649);
-            sEmojisMap.Put(0x264a, Resource.Drawable.emoji_264a);
-            sEmojisMap.Put(0x264b, Resource.Drawable.emoji_264b);
-            sEmojisMap.Put(0x264c, Resource.Drawable.emoji_264c);
-            sEmojisMap.Put(0x264d, Resource.Drawable.emoji_264d);
-            sEmojisMap.Put(0x264e, Resource.Drawable.emoji_264e);
-            sEmojisMap.Put(0x264f, Resource.Drawable.emoji_264f);
-            sEmojisMap.Put(0x2650, Resource.Drawable.emoji_2650);
-            sEmojisMap.Put(0x2651, Resource.Drawable.emoji_2651);
-            sEmojisMap.Put(0x2652, Resource.Drawable.emoji_2652);
-            sEmojisMap.Put(0x2653, Resource.Drawable.emoji_2653);
-            sEmojisMap.Put(0x26ce, Resource.Drawable.emoji_26ce);
-            sEmojisMap.Put(0x1f52f, Resource.Drawable.emoji_1f52f);
-            sEmojisMap.Put(0x1f3e7, Resource.Drawable.emoji_1f3e7);
-            sEmojisMap.Put(0x1f4b9, Resource.Drawable.emoji_1f4b9);
-            sEmojisMap.Put(0x1f4b2, Resource.Drawable.emoji_1f4b2);
-            sEmojisMap.Put(0x1f4b1, Resource.Drawable.emoji_1f4b1);
-            sEmojisMap.Put(0x00a9, Resource.Drawable.emoji_00a9);
-            sEmojisMap.Put(0x00ae, Resource.Drawable.emoji_00ae);
-            sEmojisMap.Put(0x2122, Resource.Drawable.emoji_2122);
-            sEmojisMap.Put(0x274c, Resource.Drawable.emoji_274c);
-            sEmojisMap.Put(0x203c, Resource.Drawable.emoji_203c);
-            sEmojisMap.Put(0x2049, Resource.Drawable.emoji_2049);
-            sEmojisMap.Put(0x2757, Resource.Drawable.emoji_2757);
-            sEmojisMap.Put(0x2753, Resource.Drawable.emoji_2753);
-            sEmojisMap.Put(0x2755, Resource.Drawable.emoji_2755);
-            sEmojisMap.Put(0x2754, Resource.Drawable.emoji_2754);
-            sEmojisMap.Put(0x2b55, Resource.Drawable.emoji_2b55);
-            sEmojisMap.Put(0x1f51d, Resource.Drawable.emoji_1f51d);
-            sEmojisMap.Put(0x1f51a, Resource.Drawable.emoji_1f51a);
-            sEmojisMap.Put(0x1f519, Resource.Drawable.emoji_1f519);
-            sEmojisMap.Put(0x1f51b, Resource.Drawable.emoji_1f51b);
-            sEmojisMap.Put(0x1f51c, Resource.Drawable.emoji_1f51c);
-            sEmojisMap.Put(0x1f503, Resource.Drawable.emoji_1f503);
-            sEmojisMap.Put(0x1f55b, Resource.Drawable.emoji_1f55b);
-            sEmojisMap.Put(0x1f567, Resource.Drawable.emoji_1f567);
-            sEmojisMap.Put(0x1f550, Resource.Drawable.emoji_1f550);
-            sEmojisMap.Put(0x1f55c, Resource.Drawable.emoji_1f55c);
-            sEmojisMap.Put(0x1f551, Resource.Drawable.emoji_1f551);
-            sEmojisMap.Put(0x1f55d, Resource.Drawable.emoji_1f55d);
-            sEmojisMap.Put(0x1f552, Resource.Drawable.emoji_1f552);
-            sEmojisMap.Put(0x1f55e, Resource.Drawable.emoji_1f55e);
-            sEmojisMap.Put(0x1f553, Resource.Drawable.emoji_1f553);
-            sEmojisMap.Put(0x1f55f, Resource.Drawable.emoji_1f55f);
-            sEmojisMap.Put(0x1f554, Resource.Drawable.emoji_1f554);
-            sEmojisMap.Put(0x1f560, Resource.Drawable.emoji_1f560);
-            sEmojisMap.Put(0x1f555, Resource.Drawable.emoji_1f555);
-            sEmojisMap.Put(0x1f556, Resource.Drawable.emoji_1f556);
-            sEmojisMap.Put(0x1f557, Resource.Drawable.emoji_1f557);
-            sEmojisMap.Put(0x1f558, Resource.Drawable.emoji_1f558);
-            sEmojisMap.Put(0x1f559, Resource.Drawable.emoji_1f559);
-            sEmojisMap.Put(0x1f55a, Resource.Drawable.emoji_1f55a);
-            sEmojisMap.Put(0x1f561, Resource.Drawable.emoji_1f561);
-            sEmojisMap.Put(0x1f562, Resource.Drawable.emoji_1f562);
-            sEmojisMap.Put(0x1f563, Resource.Drawable.emoji_1f563);
-            sEmojisMap.Put(0x1f564, Resource.Drawable.emoji_1f564);
-            sEmojisMap.Put(0x1f565, Resource.Drawable.emoji_1f565);
-            sEmojisMap.Put(0x1f566, Resource.Drawable.emoji_1f566);
-            sEmojisMap.Put(0x2716, Resource.Drawable.emoji_2716);
-            sEmojisMap.Put(0x2795, Resource.Drawable.emoji_2795);
-            sEmojisMap.Put(0x2796, Resource.Drawable.emoji_2796);
-            sEmojisMap.Put(0x2797, Resource.Drawable.emoji_2797);
-            sEmojisMap.Put(0x2660, Resource.Drawable.emoji_2660);
-            sEmojisMap.Put(0x2665, Resource.Drawable.emoji_2665);
-            sEmojisMap.Put(0x2663, Resource.Drawable.emoji_2663);
-            sEmojisMap.Put(0x2666, Resource.Drawable.emoji_2666);
-            sEmojisMap.Put(0x1f4ae, Resource.Drawable.emoji_1f4ae);
-            sEmojisMap.Put(0x1f4af, Resource.Drawable.emoji_1f4af);
-            sEmojisMap.Put(0x2714, Resource.Drawable.emoji_2714);
-            sEmojisMap.Put(0x2611, Resource.Drawable.emoji_2611);
-            sEmojisMap.Put(0x1f518, Resource.Drawable.emoji_1f518);
-            sEmojisMap.Put(0x1f517, Resource.Drawable.emoji_1f517);
-            sEmojisMap.Put(0x27b0, Resource.Drawable.emoji_27b0);
-            sEmojisMap.Put(0x3030, Resource.Drawable.emoji_3030);
-            sEmojisMap.Put(0x303d, Resource.Drawable.emoji_303d);
-            sEmojisMap.Put(0x1f531, Resource.Drawable.emoji_1f531);
-            sEmojisMap.Put(0x25fc, Resource.Drawable.emoji_25fc);
-            sEmojisMap.Put(0x25fb, Resource.Drawable.emoji_25fb);
-            sEmojisMap.Put(0x25fe, Resource.Drawable.emoji_25fe);
-            sEmojisMap.Put(0x25fd, Resource.Drawable.emoji_25fd);
-            sEmojisMap.Put(0x25aa, Resource.Drawable.emoji_25aa);
-            sEmojisMap.Put(0x25ab, Resource.Drawable.emoji_25ab);
-            sEmojisMap.Put(0x1f53a, Resource.Drawable.emoji_1f53a);
-            sEmojisMap.Put(0x1f532, Resource.Drawable.emoji_1f532);
-            sEmojisMap.Put(0x1f533, Resource.Drawable.emoji_1f533);
-            sEmojisMap.Put(0x26ab, Resource.Drawable.emoji_26ab);
-            sEmojisMap.Put(0x26aa, Resource.Drawable.emoji_26aa);
-            sEmojisMap.Put(0x1f534, Resource.Drawable.emoji_1f534);
-            sEmojisMap.Put(0x1f535, Resource.Drawable.emoji_1f535);
-            sEmojisMap.Put(0x1f53b, Resource.Drawable.emoji_1f53b);
-            sEmojisMap.Put(0x2b1c, Resource.Drawable.emoji_2b1c);
-            sEmojisMap.Put(0x2b1b, Resource.Drawable.emoji_2b1b);
-            sEmojisMap.Put(0x1f536, Resource.Drawable.emoji_1f536);
-            sEmojisMap.Put(0x1f537, Resource.Drawable.emoji_1f537);
-            sEmojisMap.Put(0x1f538, Resource.Drawable.emoji_1f538);
-            sEmojisMap.Put(0x1f539, Resource.Drawable.emoji_1f539);
-
-
-            sSoftbanksMap.Put(0xe001, Resource.Drawable.emoji_1f466);
-            sSoftbanksMap.Put(0xe002, Resource.Drawable.emoji_1f467);
-            sSoftbanksMap.Put(0xe003, Resource.Drawable.emoji_1f48b);
-            sSoftbanksMap.Put(0xe004, Resource.Drawable.emoji_1f468);
-            sSoftbanksMap.Put(0xe005, Resource.Drawable.emoji_1f469);
-            sSoftbanksMap.Put(0xe006, Resource.Drawable.emoji_1f455);
-            sSoftbanksMap.Put(0xe007, Resource.Drawable.emoji_1f45e);
-            sSoftbanksMap.Put(0xe008, Resource.Drawable.emoji_1f4f7);
-            sSoftbanksMap.Put(0xe009, Resource.Drawable.emoji_1f4de);
-            sSoftbanksMap.Put(0xe00a, Resource.Drawable.emoji_1f4f1);
-            sSoftbanksMap.Put(0xe00b, Resource.Drawable.emoji_1f4e0);
-            sSoftbanksMap.Put(0xe00c, Resource.Drawable.emoji_1f4bb);
-            sSoftbanksMap.Put(0xe00d, Resource.Drawable.emoji_1f44a);
-            sSoftbanksMap.Put(0xe00e, Resource.Drawable.emoji_1f44d);
-            sSoftbanksMap.Put(0xe00f, Resource.Drawable.emoji_261d);
-            sSoftbanksMap.Put(0xe010, Resource.Drawable.emoji_270a);
-            sSoftbanksMap.Put(0xe011, Resource.Drawable.emoji_270c);
-            sSoftbanksMap.Put(0xe012, Resource.Drawable.emoji_1f64b);
-            sSoftbanksMap.Put(0xe013, Resource.Drawable.emoji_1f3bf);
-            sSoftbanksMap.Put(0xe014, Resource.Drawable.emoji_26f3);
-            sSoftbanksMap.Put(0xe015, Resource.Drawable.emoji_1f3be);
-            sSoftbanksMap.Put(0xe016, Resource.Drawable.emoji_26be);
-            sSoftbanksMap.Put(0xe017, Resource.Drawable.emoji_1f3c4);
-            sSoftbanksMap.Put(0xe018, Resource.Drawable.emoji_26bd);
-            sSoftbanksMap.Put(0xe019, Resource.Drawable.emoji_1f3a3);
-            sSoftbanksMap.Put(0xe01a, Resource.Drawable.emoji_1f434);
-            sSoftbanksMap.Put(0xe01b, Resource.Drawable.emoji_1f697);
-            sSoftbanksMap.Put(0xe01c, Resource.Drawable.emoji_26f5);
-            sSoftbanksMap.Put(0xe01d, Resource.Drawable.emoji_2708);
-            sSoftbanksMap.Put(0xe01e, Resource.Drawable.emoji_1f683);
-            sSoftbanksMap.Put(0xe01f, Resource.Drawable.emoji_1f685);
-            sSoftbanksMap.Put(0xe020, Resource.Drawable.emoji_2753);
-            sSoftbanksMap.Put(0xe021, Resource.Drawable.emoji_2757);
-            sSoftbanksMap.Put(0xe022, Resource.Drawable.emoji_2764);
-            sSoftbanksMap.Put(0xe023, Resource.Drawable.emoji_1f494);
-            sSoftbanksMap.Put(0xe024, Resource.Drawable.emoji_1f550);
-            sSoftbanksMap.Put(0xe025, Resource.Drawable.emoji_1f551);
-            sSoftbanksMap.Put(0xe026, Resource.Drawable.emoji_1f552);
-            sSoftbanksMap.Put(0xe027, Resource.Drawable.emoji_1f553);
-            sSoftbanksMap.Put(0xe028, Resource.Drawable.emoji_1f554);
-            sSoftbanksMap.Put(0xe029, Resource.Drawable.emoji_1f555);
-            sSoftbanksMap.Put(0xe02a, Resource.Drawable.emoji_1f556);
-            sSoftbanksMap.Put(0xe02b, Resource.Drawable.emoji_1f557);
-            sSoftbanksMap.Put(0xe02c, Resource.Drawable.emoji_1f558);
-            sSoftbanksMap.Put(0xe02d, Resource.Drawable.emoji_1f559);
-            sSoftbanksMap.Put(0xe02e, Resource.Drawable.emoji_1f55a);
-            sSoftbanksMap.Put(0xe02f, Resource.Drawable.emoji_1f55b);
-            sSoftbanksMap.Put(0xe030, Resource.Drawable.emoji_1f338);
-            sSoftbanksMap.Put(0xe031, Resource.Drawable.emoji_1f531);
-            sSoftbanksMap.Put(0xe032, Resource.Drawable.emoji_1f339);
-            sSoftbanksMap.Put(0xe033, Resource.Drawable.emoji_1f384);
-            sSoftbanksMap.Put(0xe034, Resource.Drawable.emoji_1f48d);
-            sSoftbanksMap.Put(0xe035, Resource.Drawable.emoji_1f48e);
-            sSoftbanksMap.Put(0xe036, Resource.Drawable.emoji_1f3e0);
-            sSoftbanksMap.Put(0xe037, Resource.Drawable.emoji_26ea);
-            sSoftbanksMap.Put(0xe038, Resource.Drawable.emoji_1f3e2);
-            sSoftbanksMap.Put(0xe039, Resource.Drawable.emoji_1f689);
-            sSoftbanksMap.Put(0xe03a, Resource.Drawable.emoji_26fd);
-            sSoftbanksMap.Put(0xe03b, Resource.Drawable.emoji_1f5fb);
-            sSoftbanksMap.Put(0xe03c, Resource.Drawable.emoji_1f3a4);
-            sSoftbanksMap.Put(0xe03d, Resource.Drawable.emoji_1f3a5);
-            sSoftbanksMap.Put(0xe03e, Resource.Drawable.emoji_1f3b5);
-            sSoftbanksMap.Put(0xe03f, Resource.Drawable.emoji_1f511);
-            sSoftbanksMap.Put(0xe040, Resource.Drawable.emoji_1f3b7);
-            sSoftbanksMap.Put(0xe041, Resource.Drawable.emoji_1f3b8);
-            sSoftbanksMap.Put(0xe042, Resource.Drawable.emoji_1f3ba);
-            sSoftbanksMap.Put(0xe043, Resource.Drawable.emoji_1f374);
-            sSoftbanksMap.Put(0xe044, Resource.Drawable.emoji_1f377);
-            sSoftbanksMap.Put(0xe045, Resource.Drawable.emoji_2615);
-            sSoftbanksMap.Put(0xe046, Resource.Drawable.emoji_1f370);
-            sSoftbanksMap.Put(0xe047, Resource.Drawable.emoji_1f37a);
-            sSoftbanksMap.Put(0xe048, Resource.Drawable.emoji_26c4);
-            sSoftbanksMap.Put(0xe049, Resource.Drawable.emoji_2601);
-            sSoftbanksMap.Put(0xe04a, Resource.Drawable.emoji_2600);
-            sSoftbanksMap.Put(0xe04b, Resource.Drawable.emoji_2614);
-            sSoftbanksMap.Put(0xe04c, Resource.Drawable.emoji_1f313);
-            sSoftbanksMap.Put(0xe04d, Resource.Drawable.emoji_1f304);
-            sSoftbanksMap.Put(0xe04e, Resource.Drawable.emoji_1f47c);
-            sSoftbanksMap.Put(0xe04f, Resource.Drawable.emoji_1f431);
-            sSoftbanksMap.Put(0xe050, Resource.Drawable.emoji_1f42f);
-            sSoftbanksMap.Put(0xe051, Resource.Drawable.emoji_1f43b);
-            sSoftbanksMap.Put(0xe052, Resource.Drawable.emoji_1f429);
-            sSoftbanksMap.Put(0xe053, Resource.Drawable.emoji_1f42d);
-            sSoftbanksMap.Put(0xe054, Resource.Drawable.emoji_1f433);
-            sSoftbanksMap.Put(0xe055, Resource.Drawable.emoji_1f427);
-            sSoftbanksMap.Put(0xe056, Resource.Drawable.emoji_1f60a);
-            sSoftbanksMap.Put(0xe057, Resource.Drawable.emoji_1f603);
-            sSoftbanksMap.Put(0xe058, Resource.Drawable.emoji_1f61e);
-            sSoftbanksMap.Put(0xe059, Resource.Drawable.emoji_1f620);
-            sSoftbanksMap.Put(0xe05a, Resource.Drawable.emoji_1f4a9);
-            sSoftbanksMap.Put(0xe101, Resource.Drawable.emoji_1f4ea);
-            sSoftbanksMap.Put(0xe102, Resource.Drawable.emoji_1f4ee);
-            sSoftbanksMap.Put(0xe103, Resource.Drawable.emoji_1f4e7);
-            sSoftbanksMap.Put(0xe104, Resource.Drawable.emoji_1f4f2);
-            sSoftbanksMap.Put(0xe105, Resource.Drawable.emoji_1f61c);
-            sSoftbanksMap.Put(0xe106, Resource.Drawable.emoji_1f60d);
-            sSoftbanksMap.Put(0xe107, Resource.Drawable.emoji_1f631);
-            sSoftbanksMap.Put(0xe108, Resource.Drawable.emoji_1f613);
-            sSoftbanksMap.Put(0xe109, Resource.Drawable.emoji_1f435);
-            sSoftbanksMap.Put(0xe10a, Resource.Drawable.emoji_1f419);
-            sSoftbanksMap.Put(0xe10b, Resource.Drawable.emoji_1f437);
-            sSoftbanksMap.Put(0xe10c, Resource.Drawable.emoji_1f47d);
-            sSoftbanksMap.Put(0xe10d, Resource.Drawable.emoji_1f680);
-            sSoftbanksMap.Put(0xe10e, Resource.Drawable.emoji_1f451);
-            sSoftbanksMap.Put(0xe10f, Resource.Drawable.emoji_1f4a1);
-            sSoftbanksMap.Put(0xe110, Resource.Drawable.emoji_1f331);
-            sSoftbanksMap.Put(0xe111, Resource.Drawable.emoji_1f48f);
-            sSoftbanksMap.Put(0xe112, Resource.Drawable.emoji_1f381);
-            sSoftbanksMap.Put(0xe113, Resource.Drawable.emoji_1f52b);
-            sSoftbanksMap.Put(0xe114, Resource.Drawable.emoji_1f50d);
-            sSoftbanksMap.Put(0xe115, Resource.Drawable.emoji_1f3c3);
-            sSoftbanksMap.Put(0xe116, Resource.Drawable.emoji_1f528);
-            sSoftbanksMap.Put(0xe117, Resource.Drawable.emoji_1f386);
-            sSoftbanksMap.Put(0xe118, Resource.Drawable.emoji_1f341);
-            sSoftbanksMap.Put(0xe119, Resource.Drawable.emoji_1f342);
-            sSoftbanksMap.Put(0xe11a, Resource.Drawable.emoji_1f47f);
-            sSoftbanksMap.Put(0xe11b, Resource.Drawable.emoji_1f47b);
-            sSoftbanksMap.Put(0xe11c, Resource.Drawable.emoji_1f480);
-            sSoftbanksMap.Put(0xe11d, Resource.Drawable.emoji_1f525);
-            sSoftbanksMap.Put(0xe11e, Resource.Drawable.emoji_1f4bc);
-            sSoftbanksMap.Put(0xe11f, Resource.Drawable.emoji_1f4ba);
-            sSoftbanksMap.Put(0xe120, Resource.Drawable.emoji_1f354);
-            sSoftbanksMap.Put(0xe121, Resource.Drawable.emoji_26f2);
-            sSoftbanksMap.Put(0xe122, Resource.Drawable.emoji_26fa);
-            sSoftbanksMap.Put(0xe123, Resource.Drawable.emoji_2668);
-            sSoftbanksMap.Put(0xe124, Resource.Drawable.emoji_1f3a1);
-            sSoftbanksMap.Put(0xe125, Resource.Drawable.emoji_1f3ab);
-            sSoftbanksMap.Put(0xe126, Resource.Drawable.emoji_1f4bf);
-            sSoftbanksMap.Put(0xe127, Resource.Drawable.emoji_1f4c0);
-            sSoftbanksMap.Put(0xe128, Resource.Drawable.emoji_1f4fb);
-            sSoftbanksMap.Put(0xe129, Resource.Drawable.emoji_1f4fc);
-            sSoftbanksMap.Put(0xe12a, Resource.Drawable.emoji_1f4fa);
-            sSoftbanksMap.Put(0xe12b, Resource.Drawable.emoji_1f47e);
-            sSoftbanksMap.Put(0xe12c, Resource.Drawable.emoji_303d);
-            sSoftbanksMap.Put(0xe12d, Resource.Drawable.emoji_1f004);
-            sSoftbanksMap.Put(0xe12e, Resource.Drawable.emoji_1f19a);
-            sSoftbanksMap.Put(0xe12f, Resource.Drawable.emoji_1f4b0);
-            sSoftbanksMap.Put(0xe130, Resource.Drawable.emoji_1f3af);
-            sSoftbanksMap.Put(0xe131, Resource.Drawable.emoji_1f3c6);
-            sSoftbanksMap.Put(0xe132, Resource.Drawable.emoji_1f3c1);
-            sSoftbanksMap.Put(0xe133, Resource.Drawable.emoji_1f3b0);
-            sSoftbanksMap.Put(0xe134, Resource.Drawable.emoji_1f40e);
-            sSoftbanksMap.Put(0xe135, Resource.Drawable.emoji_1f6a4);
-            sSoftbanksMap.Put(0xe136, Resource.Drawable.emoji_1f6b2);
-            sSoftbanksMap.Put(0xe137, Resource.Drawable.emoji_1f6a7);
-            sSoftbanksMap.Put(0xe138, Resource.Drawable.emoji_1f6b9);
-            sSoftbanksMap.Put(0xe139, Resource.Drawable.emoji_1f6ba);
-            sSoftbanksMap.Put(0xe13a, Resource.Drawable.emoji_1f6bc);
-            sSoftbanksMap.Put(0xe13b, Resource.Drawable.emoji_1f489);
-            sSoftbanksMap.Put(0xe13c, Resource.Drawable.emoji_1f4a4);
-            sSoftbanksMap.Put(0xe13d, Resource.Drawable.emoji_26a1);
-            sSoftbanksMap.Put(0xe13e, Resource.Drawable.emoji_1f460);
-            sSoftbanksMap.Put(0xe13f, Resource.Drawable.emoji_1f6c0);
-            sSoftbanksMap.Put(0xe140, Resource.Drawable.emoji_1f6bd);
-            sSoftbanksMap.Put(0xe141, Resource.Drawable.emoji_1f50a);
-            sSoftbanksMap.Put(0xe142, Resource.Drawable.emoji_1f4e2);
-            sSoftbanksMap.Put(0xe143, Resource.Drawable.emoji_1f38c);
-            sSoftbanksMap.Put(0xe144, Resource.Drawable.emoji_1f50f);
-            sSoftbanksMap.Put(0xe145, Resource.Drawable.emoji_1f513);
-            sSoftbanksMap.Put(0xe146, Resource.Drawable.emoji_1f306);
-            sSoftbanksMap.Put(0xe147, Resource.Drawable.emoji_1f373);
-            sSoftbanksMap.Put(0xe148, Resource.Drawable.emoji_1f4c7);
-            sSoftbanksMap.Put(0xe149, Resource.Drawable.emoji_1f4b1);
-            sSoftbanksMap.Put(0xe14a, Resource.Drawable.emoji_1f4b9);
-            sSoftbanksMap.Put(0xe14b, Resource.Drawable.emoji_1f4e1);
-            sSoftbanksMap.Put(0xe14c, Resource.Drawable.emoji_1f4aa);
-            sSoftbanksMap.Put(0xe14d, Resource.Drawable.emoji_1f3e6);
-            sSoftbanksMap.Put(0xe14e, Resource.Drawable.emoji_1f6a5);
-            sSoftbanksMap.Put(0xe14f, Resource.Drawable.emoji_1f17f);
-            sSoftbanksMap.Put(0xe150, Resource.Drawable.emoji_1f68f);
-            sSoftbanksMap.Put(0xe151, Resource.Drawable.emoji_1f6bb);
-            sSoftbanksMap.Put(0xe152, Resource.Drawable.emoji_1f46e);
-            sSoftbanksMap.Put(0xe153, Resource.Drawable.emoji_1f3e3);
-            sSoftbanksMap.Put(0xe154, Resource.Drawable.emoji_1f3e7);
-            sSoftbanksMap.Put(0xe155, Resource.Drawable.emoji_1f3e5);
-            sSoftbanksMap.Put(0xe156, Resource.Drawable.emoji_1f3ea);
-            sSoftbanksMap.Put(0xe157, Resource.Drawable.emoji_1f3eb);
-            sSoftbanksMap.Put(0xe158, Resource.Drawable.emoji_1f3e8);
-            sSoftbanksMap.Put(0xe159, Resource.Drawable.emoji_1f68c);
-            sSoftbanksMap.Put(0xe15a, Resource.Drawable.emoji_1f695);
-            sSoftbanksMap.Put(0xe201, Resource.Drawable.emoji_1f6b6);
-            sSoftbanksMap.Put(0xe202, Resource.Drawable.emoji_1f6a2);
-            sSoftbanksMap.Put(0xe203, Resource.Drawable.emoji_1f201);
-            sSoftbanksMap.Put(0xe204, Resource.Drawable.emoji_1f49f);
-            sSoftbanksMap.Put(0xe205, Resource.Drawable.emoji_2734);
-            sSoftbanksMap.Put(0xe206, Resource.Drawable.emoji_2733);
-            sSoftbanksMap.Put(0xe207, Resource.Drawable.emoji_1f51e);
-            sSoftbanksMap.Put(0xe208, Resource.Drawable.emoji_1f6ad);
-            sSoftbanksMap.Put(0xe209, Resource.Drawable.emoji_1f530);
-            sSoftbanksMap.Put(0xe20a, Resource.Drawable.emoji_267f);
-            sSoftbanksMap.Put(0xe20b, Resource.Drawable.emoji_1f4f6);
-            sSoftbanksMap.Put(0xe20c, Resource.Drawable.emoji_2665);
-            sSoftbanksMap.Put(0xe20d, Resource.Drawable.emoji_2666);
-            sSoftbanksMap.Put(0xe20e, Resource.Drawable.emoji_2660);
-            sSoftbanksMap.Put(0xe20f, Resource.Drawable.emoji_2663);
-            sSoftbanksMap.Put(0xe210, Resource.Drawable.emoji_0023);
-            sSoftbanksMap.Put(0xe211, Resource.Drawable.emoji_27bf);
-            sSoftbanksMap.Put(0xe212, Resource.Drawable.emoji_1f195);
-            sSoftbanksMap.Put(0xe213, Resource.Drawable.emoji_1f199);
-            sSoftbanksMap.Put(0xe214, Resource.Drawable.emoji_1f192);
-            sSoftbanksMap.Put(0xe215, Resource.Drawable.emoji_1f236);
-            sSoftbanksMap.Put(0xe216, Resource.Drawable.emoji_1f21a);
-            sSoftbanksMap.Put(0xe217, Resource.Drawable.emoji_1f237);
-            sSoftbanksMap.Put(0xe218, Resource.Drawable.emoji_1f238);
-            sSoftbanksMap.Put(0xe219, Resource.Drawable.emoji_1f534);
-            sSoftbanksMap.Put(0xe21a, Resource.Drawable.emoji_1f532);
-            sSoftbanksMap.Put(0xe21b, Resource.Drawable.emoji_1f533);
-            sSoftbanksMap.Put(0xe21c, Resource.Drawable.emoji_0031);
-            sSoftbanksMap.Put(0xe21d, Resource.Drawable.emoji_0032);
-            sSoftbanksMap.Put(0xe21e, Resource.Drawable.emoji_0033);
-            sSoftbanksMap.Put(0xe21f, Resource.Drawable.emoji_0034);
-            sSoftbanksMap.Put(0xe220, Resource.Drawable.emoji_0035);
-            sSoftbanksMap.Put(0xe221, Resource.Drawable.emoji_0036);
-            sSoftbanksMap.Put(0xe222, Resource.Drawable.emoji_0037);
-            sSoftbanksMap.Put(0xe223, Resource.Drawable.emoji_0038);
-            sSoftbanksMap.Put(0xe224, Resource.Drawable.emoji_0039);
-            sSoftbanksMap.Put(0xe225, Resource.Drawable.emoji_0030);
-            sSoftbanksMap.Put(0xe226, Resource.Drawable.emoji_1f250);
-            sSoftbanksMap.Put(0xe227, Resource.Drawable.emoji_1f239);
-            sSoftbanksMap.Put(0xe228, Resource.Drawable.emoji_1f202);
-            sSoftbanksMap.Put(0xe229, Resource.Drawable.emoji_1f194);
-            sSoftbanksMap.Put(0xe22a, Resource.Drawable.emoji_1f235);
-            sSoftbanksMap.Put(0xe22b, Resource.Drawable.emoji_1f233);
-            sSoftbanksMap.Put(0xe22c, Resource.Drawable.emoji_1f22f);
-            sSoftbanksMap.Put(0xe22d, Resource.Drawable.emoji_1f23a);
-            sSoftbanksMap.Put(0xe22e, Resource.Drawable.emoji_1f446);
-            sSoftbanksMap.Put(0xe22f, Resource.Drawable.emoji_1f447);
-            sSoftbanksMap.Put(0xe230, Resource.Drawable.emoji_1f448);
-            sSoftbanksMap.Put(0xe231, Resource.Drawable.emoji_1f449);
-            sSoftbanksMap.Put(0xe232, Resource.Drawable.emoji_2b06);
-            sSoftbanksMap.Put(0xe233, Resource.Drawable.emoji_2b07);
-            sSoftbanksMap.Put(0xe234, Resource.Drawable.emoji_27a1);
-            sSoftbanksMap.Put(0xe235, Resource.Drawable.emoji_1f519);
-            sSoftbanksMap.Put(0xe236, Resource.Drawable.emoji_2197);
-            sSoftbanksMap.Put(0xe237, Resource.Drawable.emoji_2196);
-            sSoftbanksMap.Put(0xe238, Resource.Drawable.emoji_2198);
-            sSoftbanksMap.Put(0xe239, Resource.Drawable.emoji_2199);
-            sSoftbanksMap.Put(0xe23a, Resource.Drawable.emoji_25b6);
-            sSoftbanksMap.Put(0xe23b, Resource.Drawable.emoji_25c0);
-            sSoftbanksMap.Put(0xe23c, Resource.Drawable.emoji_23e9);
-            sSoftbanksMap.Put(0xe23d, Resource.Drawable.emoji_23ea);
-            sSoftbanksMap.Put(0xe23e, Resource.Drawable.emoji_1f52e);
-            sSoftbanksMap.Put(0xe23f, Resource.Drawable.emoji_2648);
-            sSoftbanksMap.Put(0xe240, Resource.Drawable.emoji_2649);
-            sSoftbanksMap.Put(0xe241, Resource.Drawable.emoji_264a);
-            sSoftbanksMap.Put(0xe242, Resource.Drawable.emoji_264b);
-            sSoftbanksMap.Put(0xe243, Resource.Drawable.emoji_264c);
-            sSoftbanksMap.Put(0xe244, Resource.Drawable.emoji_264d);
-            sSoftbanksMap.Put(0xe245, Resource.Drawable.emoji_264e);
-            sSoftbanksMap.Put(0xe246, Resource.Drawable.emoji_264f);
-            sSoftbanksMap.Put(0xe247, Resource.Drawable.emoji_2650);
-            sSoftbanksMap.Put(0xe248, Resource.Drawable.emoji_2651);
-            sSoftbanksMap.Put(0xe249, Resource.Drawable.emoji_2652);
-            sSoftbanksMap.Put(0xe24a, Resource.Drawable.emoji_2653);
-            sSoftbanksMap.Put(0xe24b, Resource.Drawable.emoji_26ce);
-            sSoftbanksMap.Put(0xe24c, Resource.Drawable.emoji_1f51d);
-            sSoftbanksMap.Put(0xe24d, Resource.Drawable.emoji_1f197);
-            sSoftbanksMap.Put(0xe24e, Resource.Drawable.emoji_00a9);
-            sSoftbanksMap.Put(0xe24f, Resource.Drawable.emoji_00ae);
-            sSoftbanksMap.Put(0xe250, Resource.Drawable.emoji_1f4f3);
-            sSoftbanksMap.Put(0xe251, Resource.Drawable.emoji_1f4f4);
-            sSoftbanksMap.Put(0xe252, Resource.Drawable.emoji_26a0);
-            sSoftbanksMap.Put(0xe253, Resource.Drawable.emoji_1f481);
-            sSoftbanksMap.Put(0xe301, Resource.Drawable.emoji_1f4c3);
-            sSoftbanksMap.Put(0xe302, Resource.Drawable.emoji_1f454);
-            sSoftbanksMap.Put(0xe303, Resource.Drawable.emoji_1f33a);
-            sSoftbanksMap.Put(0xe304, Resource.Drawable.emoji_1f337);
-            sSoftbanksMap.Put(0xe305, Resource.Drawable.emoji_1f33b);
-            sSoftbanksMap.Put(0xe306, Resource.Drawable.emoji_1f490);
-            sSoftbanksMap.Put(0xe307, Resource.Drawable.emoji_1f334);
-            sSoftbanksMap.Put(0xe308, Resource.Drawable.emoji_1f335);
-            sSoftbanksMap.Put(0xe309, Resource.Drawable.emoji_1f6be);
-            sSoftbanksMap.Put(0xe30a, Resource.Drawable.emoji_1f3a7);
-            sSoftbanksMap.Put(0xe30b, Resource.Drawable.emoji_1f376);
-            sSoftbanksMap.Put(0xe30c, Resource.Drawable.emoji_1f37b);
-            sSoftbanksMap.Put(0xe30d, Resource.Drawable.emoji_3297);
-            sSoftbanksMap.Put(0xe30e, Resource.Drawable.emoji_1f6ac);
-            sSoftbanksMap.Put(0xe30f, Resource.Drawable.emoji_1f48a);
-            sSoftbanksMap.Put(0xe310, Resource.Drawable.emoji_1f388);
-            sSoftbanksMap.Put(0xe311, Resource.Drawable.emoji_1f4a3);
-            sSoftbanksMap.Put(0xe312, Resource.Drawable.emoji_1f389);
-            sSoftbanksMap.Put(0xe313, Resource.Drawable.emoji_2702);
-            sSoftbanksMap.Put(0xe314, Resource.Drawable.emoji_1f380);
-            sSoftbanksMap.Put(0xe315, Resource.Drawable.emoji_3299);
-            sSoftbanksMap.Put(0xe316, Resource.Drawable.emoji_1f4bd);
-            sSoftbanksMap.Put(0xe317, Resource.Drawable.emoji_1f4e3);
-            sSoftbanksMap.Put(0xe318, Resource.Drawable.emoji_1f452);
-            sSoftbanksMap.Put(0xe319, Resource.Drawable.emoji_1f457);
-            sSoftbanksMap.Put(0xe31a, Resource.Drawable.emoji_1f461);
-            sSoftbanksMap.Put(0xe31b, Resource.Drawable.emoji_1f462);
-            sSoftbanksMap.Put(0xe31c, Resource.Drawable.emoji_1f484);
-            sSoftbanksMap.Put(0xe31d, Resource.Drawable.emoji_1f485);
-            sSoftbanksMap.Put(0xe31e, Resource.Drawable.emoji_1f486);
-            sSoftbanksMap.Put(0xe31f, Resource.Drawable.emoji_1f487);
-            sSoftbanksMap.Put(0xe320, Resource.Drawable.emoji_1f488);
-            sSoftbanksMap.Put(0xe321, Resource.Drawable.emoji_1f458);
-            sSoftbanksMap.Put(0xe322, Resource.Drawable.emoji_1f459);
-            sSoftbanksMap.Put(0xe323, Resource.Drawable.emoji_1f45c);
-            sSoftbanksMap.Put(0xe324, Resource.Drawable.emoji_1f3ac);
-            sSoftbanksMap.Put(0xe325, Resource.Drawable.emoji_1f514);
-            sSoftbanksMap.Put(0xe326, Resource.Drawable.emoji_1f3b6);
-            sSoftbanksMap.Put(0xe327, Resource.Drawable.emoji_1f493);
-            sSoftbanksMap.Put(0xe328, Resource.Drawable.emoji_1f48c);
-            sSoftbanksMap.Put(0xe329, Resource.Drawable.emoji_1f498);
-            sSoftbanksMap.Put(0xe32a, Resource.Drawable.emoji_1f499);
-            sSoftbanksMap.Put(0xe32b, Resource.Drawable.emoji_1f49a);
-            sSoftbanksMap.Put(0xe32c, Resource.Drawable.emoji_1f49b);
-            sSoftbanksMap.Put(0xe32d, Resource.Drawable.emoji_1f49c);
-            sSoftbanksMap.Put(0xe32e, Resource.Drawable.emoji_2728);
-            sSoftbanksMap.Put(0xe32f, Resource.Drawable.emoji_2b50);
-            sSoftbanksMap.Put(0xe330, Resource.Drawable.emoji_1f4a8);
-            sSoftbanksMap.Put(0xe331, Resource.Drawable.emoji_1f4a6);
-            sSoftbanksMap.Put(0xe332, Resource.Drawable.emoji_2b55);
-            sSoftbanksMap.Put(0xe333, Resource.Drawable.emoji_2716);
-            sSoftbanksMap.Put(0xe334, Resource.Drawable.emoji_1f4a2);
-            sSoftbanksMap.Put(0xe335, Resource.Drawable.emoji_1f31f);
-            sSoftbanksMap.Put(0xe336, Resource.Drawable.emoji_2754);
-            sSoftbanksMap.Put(0xe337, Resource.Drawable.emoji_2755);
-            sSoftbanksMap.Put(0xe338, Resource.Drawable.emoji_1f375);
-            sSoftbanksMap.Put(0xe339, Resource.Drawable.emoji_1f35e);
-            sSoftbanksMap.Put(0xe33a, Resource.Drawable.emoji_1f366);
-            sSoftbanksMap.Put(0xe33b, Resource.Drawable.emoji_1f35f);
-            sSoftbanksMap.Put(0xe33c, Resource.Drawable.emoji_1f361);
-            sSoftbanksMap.Put(0xe33d, Resource.Drawable.emoji_1f358);
-            sSoftbanksMap.Put(0xe33e, Resource.Drawable.emoji_1f35a);
-            sSoftbanksMap.Put(0xe33f, Resource.Drawable.emoji_1f35d);
-            sSoftbanksMap.Put(0xe340, Resource.Drawable.emoji_1f35c);
-            sSoftbanksMap.Put(0xe341, Resource.Drawable.emoji_1f35b);
-            sSoftbanksMap.Put(0xe342, Resource.Drawable.emoji_1f359);
-            sSoftbanksMap.Put(0xe343, Resource.Drawable.emoji_1f362);
-            sSoftbanksMap.Put(0xe344, Resource.Drawable.emoji_1f363);
-            sSoftbanksMap.Put(0xe345, Resource.Drawable.emoji_1f34e);
-            sSoftbanksMap.Put(0xe346, Resource.Drawable.emoji_1f34a);
-            sSoftbanksMap.Put(0xe347, Resource.Drawable.emoji_1f353);
-            sSoftbanksMap.Put(0xe348, Resource.Drawable.emoji_1f349);
-            sSoftbanksMap.Put(0xe349, Resource.Drawable.emoji_1f345);
-            sSoftbanksMap.Put(0xe34a, Resource.Drawable.emoji_1f346);
-            sSoftbanksMap.Put(0xe34b, Resource.Drawable.emoji_1f382);
-            sSoftbanksMap.Put(0xe34c, Resource.Drawable.emoji_1f371);
-            sSoftbanksMap.Put(0xe34d, Resource.Drawable.emoji_1f372);
-            sSoftbanksMap.Put(0xe401, Resource.Drawable.emoji_1f625);
-            sSoftbanksMap.Put(0xe402, Resource.Drawable.emoji_1f60f);
-            sSoftbanksMap.Put(0xe403, Resource.Drawable.emoji_1f614);
-            sSoftbanksMap.Put(0xe404, Resource.Drawable.emoji_1f601);
-            sSoftbanksMap.Put(0xe405, Resource.Drawable.emoji_1f609);
-            sSoftbanksMap.Put(0xe406, Resource.Drawable.emoji_1f623);
-            sSoftbanksMap.Put(0xe407, Resource.Drawable.emoji_1f616);
-            sSoftbanksMap.Put(0xe408, Resource.Drawable.emoji_1f62a);
-            sSoftbanksMap.Put(0xe409, Resource.Drawable.emoji_1f445);
-            sSoftbanksMap.Put(0xe40a, Resource.Drawable.emoji_1f606);
-            sSoftbanksMap.Put(0xe40b, Resource.Drawable.emoji_1f628);
-            sSoftbanksMap.Put(0xe40c, Resource.Drawable.emoji_1f637);
-            sSoftbanksMap.Put(0xe40d, Resource.Drawable.emoji_1f633);
-            sSoftbanksMap.Put(0xe40e, Resource.Drawable.emoji_1f612);
-            sSoftbanksMap.Put(0xe40f, Resource.Drawable.emoji_1f630);
-            sSoftbanksMap.Put(0xe410, Resource.Drawable.emoji_1f632);
-            sSoftbanksMap.Put(0xe411, Resource.Drawable.emoji_1f62d);
-            sSoftbanksMap.Put(0xe412, Resource.Drawable.emoji_1f602);
-            sSoftbanksMap.Put(0xe413, Resource.Drawable.emoji_1f622);
-            sSoftbanksMap.Put(0xe414, Resource.Drawable.emoji_263a);
-            sSoftbanksMap.Put(0xe415, Resource.Drawable.emoji_1f605);
-            sSoftbanksMap.Put(0xe416, Resource.Drawable.emoji_1f621);
-            sSoftbanksMap.Put(0xe417, Resource.Drawable.emoji_1f61a);
-            sSoftbanksMap.Put(0xe418, Resource.Drawable.emoji_1f618);
-            sSoftbanksMap.Put(0xe419, Resource.Drawable.emoji_1f440);
-            sSoftbanksMap.Put(0xe41a, Resource.Drawable.emoji_1f443);
-            sSoftbanksMap.Put(0xe41b, Resource.Drawable.emoji_1f442);
-            sSoftbanksMap.Put(0xe41c, Resource.Drawable.emoji_1f444);
-            sSoftbanksMap.Put(0xe41d, Resource.Drawable.emoji_1f64f);
-            sSoftbanksMap.Put(0xe41e, Resource.Drawable.emoji_1f44b);
-            sSoftbanksMap.Put(0xe41f, Resource.Drawable.emoji_1f44f);
-            sSoftbanksMap.Put(0xe420, Resource.Drawable.emoji_1f44c);
-            sSoftbanksMap.Put(0xe421, Resource.Drawable.emoji_1f44e);
-            sSoftbanksMap.Put(0xe422, Resource.Drawable.emoji_1f450);
-            sSoftbanksMap.Put(0xe423, Resource.Drawable.emoji_1f645);
-            sSoftbanksMap.Put(0xe424, Resource.Drawable.emoji_1f646);
-            sSoftbanksMap.Put(0xe425, Resource.Drawable.emoji_1f491);
-            sSoftbanksMap.Put(0xe426, Resource.Drawable.emoji_1f647);
-            sSoftbanksMap.Put(0xe427, Resource.Drawable.emoji_1f64c);
-            sSoftbanksMap.Put(0xe428, Resource.Drawable.emoji_1f46b);
-            sSoftbanksMap.Put(0xe429, Resource.Drawable.emoji_1f46f);
-            sSoftbanksMap.Put(0xe42a, Resource.Drawable.emoji_1f3c0);
-            sSoftbanksMap.Put(0xe42b, Resource.Drawable.emoji_1f3c8);
-            sSoftbanksMap.Put(0xe42c, Resource.Drawable.emoji_1f3b1);
-            sSoftbanksMap.Put(0xe42d, Resource.Drawable.emoji_1f3ca);
-            sSoftbanksMap.Put(0xe42e, Resource.Drawable.emoji_1f699);
-            sSoftbanksMap.Put(0xe42f, Resource.Drawable.emoji_1f69a);
-            sSoftbanksMap.Put(0xe430, Resource.Drawable.emoji_1f692);
-            sSoftbanksMap.Put(0xe431, Resource.Drawable.emoji_1f691);
-            sSoftbanksMap.Put(0xe432, Resource.Drawable.emoji_1f693);
-            sSoftbanksMap.Put(0xe433, Resource.Drawable.emoji_1f3a2);
-            sSoftbanksMap.Put(0xe434, Resource.Drawable.emoji_1f687);
-            sSoftbanksMap.Put(0xe435, Resource.Drawable.emoji_1f684);
-            sSoftbanksMap.Put(0xe436, Resource.Drawable.emoji_1f38d);
-            sSoftbanksMap.Put(0xe437, Resource.Drawable.emoji_1f49d);
-            sSoftbanksMap.Put(0xe438, Resource.Drawable.emoji_1f38e);
-            sSoftbanksMap.Put(0xe439, Resource.Drawable.emoji_1f393);
-            sSoftbanksMap.Put(0xe43a, Resource.Drawable.emoji_1f392);
-            sSoftbanksMap.Put(0xe43b, Resource.Drawable.emoji_1f38f);
-            sSoftbanksMap.Put(0xe43c, Resource.Drawable.emoji_1f302);
-            sSoftbanksMap.Put(0xe43d, Resource.Drawable.emoji_1f492);
-            sSoftbanksMap.Put(0xe43e, Resource.Drawable.emoji_1f30a);
-            sSoftbanksMap.Put(0xe43f, Resource.Drawable.emoji_1f367);
-            sSoftbanksMap.Put(0xe440, Resource.Drawable.emoji_1f387);
-            sSoftbanksMap.Put(0xe441, Resource.Drawable.emoji_1f41a);
-            sSoftbanksMap.Put(0xe442, Resource.Drawable.emoji_1f390);
-            sSoftbanksMap.Put(0xe443, Resource.Drawable.emoji_1f300);
-            sSoftbanksMap.Put(0xe444, Resource.Drawable.emoji_1f33e);
-            sSoftbanksMap.Put(0xe445, Resource.Drawable.emoji_1f383);
-            sSoftbanksMap.Put(0xe446, Resource.Drawable.emoji_1f391);
-            sSoftbanksMap.Put(0xe447, Resource.Drawable.emoji_1f343);
-            sSoftbanksMap.Put(0xe448, Resource.Drawable.emoji_1f385);
-            sSoftbanksMap.Put(0xe449, Resource.Drawable.emoji_1f305);
-            sSoftbanksMap.Put(0xe44a, Resource.Drawable.emoji_1f307);
-            sSoftbanksMap.Put(0xe44b, Resource.Drawable.emoji_1f303);
-            sSoftbanksMap.Put(0xe44b, Resource.Drawable.emoji_1f30c);
-            sSoftbanksMap.Put(0xe44c, Resource.Drawable.emoji_1f308);
-            sSoftbanksMap.Put(0xe501, Resource.Drawable.emoji_1f3e9);
-            sSoftbanksMap.Put(0xe502, Resource.Drawable.emoji_1f3a8);
-            sSoftbanksMap.Put(0xe503, Resource.Drawable.emoji_1f3a9);
-            sSoftbanksMap.Put(0xe504, Resource.Drawable.emoji_1f3ec);
-            sSoftbanksMap.Put(0xe505, Resource.Drawable.emoji_1f3ef);
-            sSoftbanksMap.Put(0xe506, Resource.Drawable.emoji_1f3f0);
-            sSoftbanksMap.Put(0xe507, Resource.Drawable.emoji_1f3a6);
-            sSoftbanksMap.Put(0xe508, Resource.Drawable.emoji_1f3ed);
-            sSoftbanksMap.Put(0xe509, Resource.Drawable.emoji_1f5fc);
-            sSoftbanksMap.Put(0xe50b, Resource.Drawable.emoji_1f1ef_1f1f5);
-            sSoftbanksMap.Put(0xe50c, Resource.Drawable.emoji_1f1fa_1f1f8);
-            sSoftbanksMap.Put(0xe50d, Resource.Drawable.emoji_1f1eb_1f1f7);
-            sSoftbanksMap.Put(0xe50e, Resource.Drawable.emoji_1f1e9_1f1ea);
-            sSoftbanksMap.Put(0xe50f, Resource.Drawable.emoji_1f1ee_1f1f9);
-            sSoftbanksMap.Put(0xe510, Resource.Drawable.emoji_1f1ec_1f1e7);
-            sSoftbanksMap.Put(0xe511, Resource.Drawable.emoji_1f1ea_1f1f8);
-            sSoftbanksMap.Put(0xe512, Resource.Drawable.emoji_1f1f7_1f1fa);
-            sSoftbanksMap.Put(0xe513, Resource.Drawable.emoji_1f1e8_1f1f3);
-            sSoftbanksMap.Put(0xe514, Resource.Drawable.emoji_1f1f0_1f1f7);
-            sSoftbanksMap.Put(0xe515, Resource.Drawable.emoji_1f471);
-            sSoftbanksMap.Put(0xe516, Resource.Drawable.emoji_1f472);
-            sSoftbanksMap.Put(0xe517, Resource.Drawable.emoji_1f473);
-            sSoftbanksMap.Put(0xe518, Resource.Drawable.emoji_1f474);
-            sSoftbanksMap.Put(0xe519, Resource.Drawable.emoji_1f475);
-            sSoftbanksMap.Put(0xe51a, Resource.Drawable.emoji_1f476);
-            sSoftbanksMap.Put(0xe51b, Resource.Drawable.emoji_1f477);
-            sSoftbanksMap.Put(0xe51c, Resource.Drawable.emoji_1f478);
-            sSoftbanksMap.Put(0xe51d, Resource.Drawable.emoji_1f5fd);
-            sSoftbanksMap.Put(0xe51e, Resource.Drawable.emoji_1f482);
-            sSoftbanksMap.Put(0xe51f, Resource.Drawable.emoji_1f483);
-            sSoftbanksMap.Put(0xe520, Resource.Drawable.emoji_1f42c);
-            sSoftbanksMap.Put(0xe521, Resource.Drawable.emoji_1f426);
-            sSoftbanksMap.Put(0xe522, Resource.Drawable.emoji_1f420);
-            sSoftbanksMap.Put(0xe523, Resource.Drawable.emoji_1f423);
-            sSoftbanksMap.Put(0xe524, Resource.Drawable.emoji_1f439);
-            sSoftbanksMap.Put(0xe525, Resource.Drawable.emoji_1f41b);
-            sSoftbanksMap.Put(0xe526, Resource.Drawable.emoji_1f418);
-            sSoftbanksMap.Put(0xe527, Resource.Drawable.emoji_1f428);
-            sSoftbanksMap.Put(0xe528, Resource.Drawable.emoji_1f412);
-            sSoftbanksMap.Put(0xe529, Resource.Drawable.emoji_1f411);
-            sSoftbanksMap.Put(0xe52a, Resource.Drawable.emoji_1f43a);
-            sSoftbanksMap.Put(0xe52b, Resource.Drawable.emoji_1f42e);
-            sSoftbanksMap.Put(0xe52c, Resource.Drawable.emoji_1f430);
-            sSoftbanksMap.Put(0xe52d, Resource.Drawable.emoji_1f40d);
-            sSoftbanksMap.Put(0xe52e, Resource.Drawable.emoji_1f414);
-            sSoftbanksMap.Put(0xe52f, Resource.Drawable.emoji_1f417);
-            sSoftbanksMap.Put(0xe530, Resource.Drawable.emoji_1f42b);
-            sSoftbanksMap.Put(0xe531, Resource.Drawable.emoji_1f438);
-            sSoftbanksMap.Put(0xe532, Resource.Drawable.emoji_1f170);
-            sSoftbanksMap.Put(0xe533, Resource.Drawable.emoji_1f171);
-            sSoftbanksMap.Put(0xe534, Resource.Drawable.emoji_1f18e);
-            sSoftbanksMap.Put(0xe535, Resource.Drawable.emoji_1f17e);
-            sSoftbanksMap.Put(0xe536, Resource.Drawable.emoji_1f43e);
-            sSoftbanksMap.Put(0xe537, Resource.Drawable.emoji_2122);
-        }
-        private static bool IsSoftBankEmoji(char c)
-        {
-            return ((c >> 12) == 0xe);
-        }
-
-        private static int GetEmojiResource(Context context, int codePoint)
-        {
-            return sEmojisMap.Get(codePoint);
-        }
-
-        private static int GetSoftbankEmojiResource(char c)
-        {
-            return sSoftbanksMap.Get(c);
-        }
-        /**
-     * Convert emoji characters of the given Spannable to the according emojicon.
-     *
-     * @param context
-     * @param text
-     * @param emojiSize
-     */
-    public static void AddEmojis(Context context, ISpannable text, int emojiSize) 
+	internal class EmojiconHandler
+	{
+		private static readonly SortedDictionary<string, int> Emoticons = new SortedDictionary<string, int>
 		{
-        AddEmojis(context, text, emojiSize, 0, -1);
-    }
+			["copyright"] = Resource.Drawable.emoji_00a9,
+			["registered"] = Resource.Drawable.emoji_00ae,
+			["bangbang"] = Resource.Drawable.emoji_203c,
+			["interrobang"] = Resource.Drawable.emoji_2049,
+			["tm"] = Resource.Drawable.emoji_2122,
+			["information_source"] = Resource.Drawable.emoji_2139,
+			["left_right_arrow"] = Resource.Drawable.emoji_2194,
+			["arrow_up_down"] = Resource.Drawable.emoji_2195,
+			["arrow_upper_left"] = Resource.Drawable.emoji_2196,
+			["arrow_upper_right"] = Resource.Drawable.emoji_2197,
+			["arrow_lower_right"] = Resource.Drawable.emoji_2198,
+			["arrow_lower_left"] = Resource.Drawable.emoji_2199,
+			["leftwards_arrow_with_hook"] = Resource.Drawable.emoji_21a9,
+			["arrow_right_hook"] = Resource.Drawable.emoji_21aa,
+			["watch"] = Resource.Drawable.emoji_231a,
+			["hourglass"] = Resource.Drawable.emoji_231b,
+			["fast_forward"] = Resource.Drawable.emoji_23e9,
+			["rewind"] = Resource.Drawable.emoji_23ea,
+			["arrow_double_up"] = Resource.Drawable.emoji_23eb,
+			["arrow_double_down"] = Resource.Drawable.emoji_23ec,
+			["alarm_clock"] = Resource.Drawable.emoji_23f0,
+			["hourglass_flowing_sand"] = Resource.Drawable.emoji_23f3,
+			["m"] = Resource.Drawable.emoji_24c2,
+			["black_small_square"] = Resource.Drawable.emoji_25aa,
+			["white_small_square"] = Resource.Drawable.emoji_25ab,
+			["arrow_forward"] = Resource.Drawable.emoji_25b6,
+			["arrow_backward"] = Resource.Drawable.emoji_25c0,
+			["white_medium_square"] = Resource.Drawable.emoji_25fb,
+			["black_medium_square"] = Resource.Drawable.emoji_25fc,
+			["white_medium_small_square"] = Resource.Drawable.emoji_25fd,
+			["black_medium_small_square"] = Resource.Drawable.emoji_25fe,
+			["sunny"] = Resource.Drawable.emoji_2600,
+			["cloud"] = Resource.Drawable.emoji_2601,
+			["phone"] = Resource.Drawable.emoji_260e,
+			["ballot_box_with_check"] = Resource.Drawable.emoji_2611,
+			["umbrella"] = Resource.Drawable.emoji_2614,
+			["coffee"] = Resource.Drawable.emoji_2615,
+			["point_up"] = Resource.Drawable.emoji_261d,
+			["relaxed"] = Resource.Drawable.emoji_263a,
+			["aries"] = Resource.Drawable.emoji_2648,
+			["taurus"] = Resource.Drawable.emoji_2649,
+			["gemini"] = Resource.Drawable.emoji_264a,
+			["cancer"] = Resource.Drawable.emoji_264b,
+			["leo"] = Resource.Drawable.emoji_264c,
+			["virgo"] = Resource.Drawable.emoji_264d,
+			["libra"] = Resource.Drawable.emoji_264e,
+			["scorpius"] = Resource.Drawable.emoji_264f,
+			["sagittarius"] = Resource.Drawable.emoji_2650,
+			["capricorn"] = Resource.Drawable.emoji_2651,
+			["aquarius"] = Resource.Drawable.emoji_2652,
+			["pisces"] = Resource.Drawable.emoji_2653,
+			["spades"] = Resource.Drawable.emoji_2660,
+			["clubs"] = Resource.Drawable.emoji_2663,
+			["hearts"] = Resource.Drawable.emoji_2665,
+			["diamonds"] = Resource.Drawable.emoji_2666,
+			["hotsprings"] = Resource.Drawable.emoji_2668,
+			["recycle"] = Resource.Drawable.emoji_267b,
+			["wheelchair"] = Resource.Drawable.emoji_267f,
+			["anchor"] = Resource.Drawable.emoji_2693,
+			["warning"] = Resource.Drawable.emoji_26a0,
+			["zap"] = Resource.Drawable.emoji_26a1,
+			["white_circle"] = Resource.Drawable.emoji_26aa,
+			["black_circle"] = Resource.Drawable.emoji_26ab,
+			["soccer"] = Resource.Drawable.emoji_26bd,
+			["baseball"] = Resource.Drawable.emoji_26be,
+			["snowman"] = Resource.Drawable.emoji_26c4,
+			["partly_sunny"] = Resource.Drawable.emoji_26c5,
+			["ophiuchus"] = Resource.Drawable.emoji_26ce,
+			["no_entry"] = Resource.Drawable.emoji_26d4,
+			["church"] = Resource.Drawable.emoji_26ea,
+			["fountain"] = Resource.Drawable.emoji_26f2,
+			["golf"] = Resource.Drawable.emoji_26f3,
+			["boat"] = Resource.Drawable.emoji_26f5,
+			["tent"] = Resource.Drawable.emoji_26fa,
+			["fuelpump"] = Resource.Drawable.emoji_26fd,
+			["scissors"] = Resource.Drawable.emoji_2702,
+			["white_check_mark"] = Resource.Drawable.emoji_2705,
+			["airplane"] = Resource.Drawable.emoji_2708,
+			["email"] = Resource.Drawable.emoji_2709,
+			["fist"] = Resource.Drawable.emoji_270a,
+			["hand"] = Resource.Drawable.emoji_270b,
+			["v"] = Resource.Drawable.emoji_270c,
+			["pencil2"] = Resource.Drawable.emoji_270f,
+			["black_nib"] = Resource.Drawable.emoji_2712,
+			["heavy_check_mark"] = Resource.Drawable.emoji_2714,
+			["heavy_multiplication_x"] = Resource.Drawable.emoji_2716,
+			["sparkles"] = Resource.Drawable.emoji_2728,
+			["eight_spoked_asterisk"] = Resource.Drawable.emoji_2733,
+			["eight_pointed_black_star"] = Resource.Drawable.emoji_2734,
+			["snowflake"] = Resource.Drawable.emoji_2744,
+			["sparkle"] = Resource.Drawable.emoji_2747,
+			["x"] = Resource.Drawable.emoji_274c,
+			["negative_squared_cross_mark"] = Resource.Drawable.emoji_274e,
+			["question"] = Resource.Drawable.emoji_2753,
+			["grey_question"] = Resource.Drawable.emoji_2754,
+			["grey_exclamation"] = Resource.Drawable.emoji_2755,
+			["exclamation"] = Resource.Drawable.emoji_2757,
+			["heart"] = Resource.Drawable.emoji_2764,
+			["heavy_plus_sign"] = Resource.Drawable.emoji_2795,
+			["heavy_minus_sign"] = Resource.Drawable.emoji_2796,
+			["heavy_division_sign"] = Resource.Drawable.emoji_2797,
+			["arrow_right"] = Resource.Drawable.emoji_27a1,
+			["curly_loop"] = Resource.Drawable.emoji_27b0,
+			["loop"] = Resource.Drawable.emoji_27bf,
+			["arrow_heading_up"] = Resource.Drawable.emoji_2934,
+			["arrow_heading_down"] = Resource.Drawable.emoji_2935,
+			["arrow_left"] = Resource.Drawable.emoji_2b05,
+			["arrow_up"] = Resource.Drawable.emoji_2b06,
+			["arrow_down"] = Resource.Drawable.emoji_2b07,
+			["black_large_square"] = Resource.Drawable.emoji_2b1b,
+			["white_large_square"] = Resource.Drawable.emoji_2b1c,
+			["star"] = Resource.Drawable.emoji_2b50,
+			["o"] = Resource.Drawable.emoji_2b55,
+			["wavy_dash"] = Resource.Drawable.emoji_3030,
+			["part_alternation_mark"] = Resource.Drawable.emoji_303d,
+			["congratulations"] = Resource.Drawable.emoji_3297,
+			["secret"] = Resource.Drawable.emoji_3299,
+			["mahjong"] = Resource.Drawable.emoji_1f004,
+			["black_joker"] = Resource.Drawable.emoji_1f0cf,
+			["a"] = Resource.Drawable.emoji_1f170,
+			["b"] = Resource.Drawable.emoji_1f171,
+			["o2"] = Resource.Drawable.emoji_1f17e,
+			["parking"] = Resource.Drawable.emoji_1f17f,
+			["ab"] = Resource.Drawable.emoji_1f18e,
+			["cl"] = Resource.Drawable.emoji_1f191,
+			["cool"] = Resource.Drawable.emoji_1f192,
+			["free"] = Resource.Drawable.emoji_1f193,
+			["id"] = Resource.Drawable.emoji_1f194,
+			["new"] = Resource.Drawable.emoji_1f195,
+			["ng"] = Resource.Drawable.emoji_1f196,
+			["ok"] = Resource.Drawable.emoji_1f197,
+			["sos"] = Resource.Drawable.emoji_1f198,
+			["up"] = Resource.Drawable.emoji_1f199,
+			["vs"] = Resource.Drawable.emoji_1f19a,
+			["koko"] = Resource.Drawable.emoji_1f201,
+			["sa"] = Resource.Drawable.emoji_1f202,
+			["u7121"] = Resource.Drawable.emoji_1f21a,
+			["u6307"] = Resource.Drawable.emoji_1f22f,
+			["u7981"] = Resource.Drawable.emoji_1f232,
+			["u7a7a"] = Resource.Drawable.emoji_1f233,
+			["u5408"] = Resource.Drawable.emoji_1f234,
+			["u6e80"] = Resource.Drawable.emoji_1f235,
+			["u6709"] = Resource.Drawable.emoji_1f236,
+			["u6708"] = Resource.Drawable.emoji_1f237,
+			["u7533"] = Resource.Drawable.emoji_1f238,
+			["u5272"] = Resource.Drawable.emoji_1f239,
+			["u55b6"] = Resource.Drawable.emoji_1f23a,
+			["ideograph_advantage"] = Resource.Drawable.emoji_1f250,
+			["accept"] = Resource.Drawable.emoji_1f251,
+			["cyclone"] = Resource.Drawable.emoji_1f300,
+			["foggy"] = Resource.Drawable.emoji_1f301,
+			["closed_umbrella"] = Resource.Drawable.emoji_1f302,
+			["night_with_stars"] = Resource.Drawable.emoji_1f303,
+			["sunrise_over_mountains"] = Resource.Drawable.emoji_1f304,
+			["sunrise"] = Resource.Drawable.emoji_1f305,
+			["city_sunset"] = Resource.Drawable.emoji_1f306,
+			["city_sunrise"] = Resource.Drawable.emoji_1f307,
+			["rainbow"] = Resource.Drawable.emoji_1f308,
+			["bridge_at_night"] = Resource.Drawable.emoji_1f309,
+			["ocean"] = Resource.Drawable.emoji_1f30a,
+			["volcano"] = Resource.Drawable.emoji_1f30b,
+			["milky_way"] = Resource.Drawable.emoji_1f30c,
+			["earth_africa"] = Resource.Drawable.emoji_1f30d,
+			["earth_americas"] = Resource.Drawable.emoji_1f30e,
+			["earth_asia"] = Resource.Drawable.emoji_1f30f,
+			["globe_with_meridians"] = Resource.Drawable.emoji_1f310,
+			["new_moon"] = Resource.Drawable.emoji_1f311,
+			["waxing_crescent_moon"] = Resource.Drawable.emoji_1f312,
+			["first_quarter_moon"] = Resource.Drawable.emoji_1f313,
+			["moon"] = Resource.Drawable.emoji_1f314,
+			["full_moon"] = Resource.Drawable.emoji_1f315,
+			["waning_gibbous_moon"] = Resource.Drawable.emoji_1f316,
+			["last_quarter_moon"] = Resource.Drawable.emoji_1f317,
+			["waning_crescent_moon"] = Resource.Drawable.emoji_1f318,
+			["crescent_moon"] = Resource.Drawable.emoji_1f319,
+			["stars"] = Resource.Drawable.emoji_1f303,  // TODO (rockerhieu) review this emoji
+			["new_moon_with_face"] = Resource.Drawable.emoji_1f31a,
+			["first_quarter_moon_with_face"] = Resource.Drawable.emoji_1f31b,
+			["last_quarter_moon_with_face"] = Resource.Drawable.emoji_1f31c,
+			["full_moon_with_face"] = Resource.Drawable.emoji_1f31d,
+			["sun_with_face"] = Resource.Drawable.emoji_1f31e,
+			["star2"] = Resource.Drawable.emoji_1f31f,
+			["chestnut"] = Resource.Drawable.emoji_1f330,
+			["seedling"] = Resource.Drawable.emoji_1f331,
+			["evergreen_tree"] = Resource.Drawable.emoji_1f332,
+			["deciduous_tree"] = Resource.Drawable.emoji_1f333,
+			["palm_tree"] = Resource.Drawable.emoji_1f334,
+			["cactus"] = Resource.Drawable.emoji_1f335,
+			["tulip"] = Resource.Drawable.emoji_1f337,
+			["cherry_blossom"] = Resource.Drawable.emoji_1f338,
+			["rose"] = Resource.Drawable.emoji_1f339,
+			["hibiscus"] = Resource.Drawable.emoji_1f33a,
+			["sunflower"] = Resource.Drawable.emoji_1f33b,
+			["blossom"] = Resource.Drawable.emoji_1f33c,
+			["corn"] = Resource.Drawable.emoji_1f33d,
+			["ear_of_rice"] = Resource.Drawable.emoji_1f33e,
+			["herb"] = Resource.Drawable.emoji_1f33f,
+			["four_leaf_clover"] = Resource.Drawable.emoji_1f340,
+			["maple_leaf"] = Resource.Drawable.emoji_1f341,
+			["fallen_leaf"] = Resource.Drawable.emoji_1f342,
+			["leaves"] = Resource.Drawable.emoji_1f343,
+			["mushroom"] = Resource.Drawable.emoji_1f344,
+			["tomato"] = Resource.Drawable.emoji_1f345,
+			["eggplant"] = Resource.Drawable.emoji_1f346,
+			["grapes"] = Resource.Drawable.emoji_1f347,
+			["melon"] = Resource.Drawable.emoji_1f348,
+			["watermelon"] = Resource.Drawable.emoji_1f349,
+			["tangerine"] = Resource.Drawable.emoji_1f34a,
+			["lemon"] = Resource.Drawable.emoji_1f34b,
+			["banana"] = Resource.Drawable.emoji_1f34c,
+			["pineapple"] = Resource.Drawable.emoji_1f34d,
+			["apple"] = Resource.Drawable.emoji_1f34e,
+			["green_apple"] = Resource.Drawable.emoji_1f34f,
+			["pear"] = Resource.Drawable.emoji_1f350,
+			["peach"] = Resource.Drawable.emoji_1f351,
+			["cherries"] = Resource.Drawable.emoji_1f352,
+			["strawberry"] = Resource.Drawable.emoji_1f353,
+			["hamburger"] = Resource.Drawable.emoji_1f354,
+			["pizza"] = Resource.Drawable.emoji_1f355,
+			["meat_on_bone"] = Resource.Drawable.emoji_1f356,
+			["poultry_leg"] = Resource.Drawable.emoji_1f357,
+			["rice_cracker"] = Resource.Drawable.emoji_1f358,
+			["rice_ball"] = Resource.Drawable.emoji_1f359,
+			["rice"] = Resource.Drawable.emoji_1f35a,
+			["curry"] = Resource.Drawable.emoji_1f35b,
+			["ramen"] = Resource.Drawable.emoji_1f35c,
+			["spaghetti"] = Resource.Drawable.emoji_1f35d,
+			["bread"] = Resource.Drawable.emoji_1f35e,
+			["fries"] = Resource.Drawable.emoji_1f35f,
+			["sweet_potato"] = Resource.Drawable.emoji_1f360,
+			["dango"] = Resource.Drawable.emoji_1f361,
+			["oden"] = Resource.Drawable.emoji_1f362,
+			["sushi"] = Resource.Drawable.emoji_1f363,
+			["fried_shrimp"] = Resource.Drawable.emoji_1f364,
+			["fish_cake"] = Resource.Drawable.emoji_1f365,
+			["icecream"] = Resource.Drawable.emoji_1f366,
+			["shaved_ice"] = Resource.Drawable.emoji_1f367,
+			["ice_cream"] = Resource.Drawable.emoji_1f368,
+			["doughnut"] = Resource.Drawable.emoji_1f369,
+			["cookie"] = Resource.Drawable.emoji_1f36a,
+			["chocolate_bar"] = Resource.Drawable.emoji_1f36b,
+			["candy"] = Resource.Drawable.emoji_1f36c,
+			["lollipop"] = Resource.Drawable.emoji_1f36d,
+			["custard"] = Resource.Drawable.emoji_1f36e,
+			["honey_pot"] = Resource.Drawable.emoji_1f36f,
+			["cake"] = Resource.Drawable.emoji_1f370,
+			["bento"] = Resource.Drawable.emoji_1f371,
+			["stew"] = Resource.Drawable.emoji_1f372,
+			["egg"] = Resource.Drawable.emoji_1f373,
+			["fork_and_knife"] = Resource.Drawable.emoji_1f374,
+			["tea"] = Resource.Drawable.emoji_1f375,
+			["sake"] = Resource.Drawable.emoji_1f376,
+			["wine_glass"] = Resource.Drawable.emoji_1f377,
+			["cocktail"] = Resource.Drawable.emoji_1f378,
+			["tropical_drink"] = Resource.Drawable.emoji_1f379,
+			["beer"] = Resource.Drawable.emoji_1f37a,
+			["beers"] = Resource.Drawable.emoji_1f37b,
+			["baby_bottle"] = Resource.Drawable.emoji_1f37c,
+			["ribbon"] = Resource.Drawable.emoji_1f380,
+			["gift"] = Resource.Drawable.emoji_1f381,
+			["birthday"] = Resource.Drawable.emoji_1f382,
+			["jack_o_lantern"] = Resource.Drawable.emoji_1f383,
+			["christmas_tree"] = Resource.Drawable.emoji_1f384,
+			["santa"] = Resource.Drawable.emoji_1f385,
+			["fireworks"] = Resource.Drawable.emoji_1f386,
+			["sparkler"] = Resource.Drawable.emoji_1f387,
+			["balloon"] = Resource.Drawable.emoji_1f388,
+			["tada"] = Resource.Drawable.emoji_1f389,
+			["confetti_ball"] = Resource.Drawable.emoji_1f38a,
+			["tanabata_tree"] = Resource.Drawable.emoji_1f38b,
+			["crossed_flags"] = Resource.Drawable.emoji_1f38c,
+			["bamboo"] = Resource.Drawable.emoji_1f38d,
+			["dolls"] = Resource.Drawable.emoji_1f38e,
+			["flags"] = Resource.Drawable.emoji_1f38f,
+			["wind_chime"] = Resource.Drawable.emoji_1f390,
+			["rice_scene"] = Resource.Drawable.emoji_1f391,
+			["school_satchel"] = Resource.Drawable.emoji_1f392,
+			["mortar_board"] = Resource.Drawable.emoji_1f393,
+			["carousel_horse"] = Resource.Drawable.emoji_1f3a0,
+			["ferris_wheel"] = Resource.Drawable.emoji_1f3a1,
+			["roller_coaster"] = Resource.Drawable.emoji_1f3a2,
+			["fishing_pole_and_fish"] = Resource.Drawable.emoji_1f3a3,
+			["microphone"] = Resource.Drawable.emoji_1f3a4,
+			["movie_camera"] = Resource.Drawable.emoji_1f3a5,
+			["cinema"] = Resource.Drawable.emoji_1f3a6,
+			["headphones"] = Resource.Drawable.emoji_1f3a7,
+			["art"] = Resource.Drawable.emoji_1f3a8,
+			["tophat"] = Resource.Drawable.emoji_1f3a9,
+			["circus_tent"] = Resource.Drawable.emoji_1f3aa,
+			["ticket"] = Resource.Drawable.emoji_1f3ab,
+			["clapper"] = Resource.Drawable.emoji_1f3ac,
+			["performing_arts"] = Resource.Drawable.emoji_1f3ad,
+			["video_game"] = Resource.Drawable.emoji_1f3ae,
+			["dart"] = Resource.Drawable.emoji_1f3af,
+			["slot_machine"] = Resource.Drawable.emoji_1f3b0,
+			["8ball"] = Resource.Drawable.emoji_1f3b1,
+			["game_die"] = Resource.Drawable.emoji_1f3b2,
+			["bowling"] = Resource.Drawable.emoji_1f3b3,
+			["flower_playing_cards"] = Resource.Drawable.emoji_1f3b4,
+			["musical_note"] = Resource.Drawable.emoji_1f3b5,
+			["notes"] = Resource.Drawable.emoji_1f3b6,
+			["saxophone"] = Resource.Drawable.emoji_1f3b7,
+			["guitar"] = Resource.Drawable.emoji_1f3b8,
+			["musical_keyboard"] = Resource.Drawable.emoji_1f3b9,
+			["trumpet"] = Resource.Drawable.emoji_1f3ba,
+			["violin"] = Resource.Drawable.emoji_1f3bb,
+			["musical_score"] = Resource.Drawable.emoji_1f3bc,
+			["running_shirt_with_sash"] = Resource.Drawable.emoji_1f3bd,
+			["tennis"] = Resource.Drawable.emoji_1f3be,
+			["ski"] = Resource.Drawable.emoji_1f3bf,
+			["basketball"] = Resource.Drawable.emoji_1f3c0,
+			["checkered_flag"] = Resource.Drawable.emoji_1f3c1,
+			["snowboarder"] = Resource.Drawable.emoji_1f3c2,
+			["runner"] = Resource.Drawable.emoji_1f3c3,
+			["surfer"] = Resource.Drawable.emoji_1f3c4,
+			["trophy"] = Resource.Drawable.emoji_1f3c6,
+			["horse_racing"] = Resource.Drawable.emoji_1f3c7,
+			["football"] = Resource.Drawable.emoji_1f3c8,
+			["rugby_football"] = Resource.Drawable.emoji_1f3c9,
+			["swimmer"] = Resource.Drawable.emoji_1f3ca,
+			["house"] = Resource.Drawable.emoji_1f3e0,
+			["house_with_garden"] = Resource.Drawable.emoji_1f3e1,
+			["office"] = Resource.Drawable.emoji_1f3e2,
+			["post_office"] = Resource.Drawable.emoji_1f3e3,
+			["european_post_office"] = Resource.Drawable.emoji_1f3e4,
+			["hospital"] = Resource.Drawable.emoji_1f3e5,
+			["bank"] = Resource.Drawable.emoji_1f3e6,
+			["atm"] = Resource.Drawable.emoji_1f3e7,
+			["hotel"] = Resource.Drawable.emoji_1f3e8,
+			["love_hotel"] = Resource.Drawable.emoji_1f3e9,
+			["convenience_store"] = Resource.Drawable.emoji_1f3ea,
+			["school"] = Resource.Drawable.emoji_1f3eb,
+			["department_store"] = Resource.Drawable.emoji_1f3ec,
+			["factory"] = Resource.Drawable.emoji_1f3ed,
+			["izakaya_lantern"] = Resource.Drawable.emoji_1f3ee,
+			["japanese_castle"] = Resource.Drawable.emoji_1f3ef,
+			["european_castle"] = Resource.Drawable.emoji_1f3f0,
+			["rat"] = Resource.Drawable.emoji_1f400,
+			["mouse2"] = Resource.Drawable.emoji_1f401,
+			["ox"] = Resource.Drawable.emoji_1f402,
+			["water_buffalo"] = Resource.Drawable.emoji_1f403,
+			["cow2"] = Resource.Drawable.emoji_1f404,
+			["tiger2"] = Resource.Drawable.emoji_1f405,
+			["leopard"] = Resource.Drawable.emoji_1f406,
+			["rabbit2"] = Resource.Drawable.emoji_1f407,
+			["cat2"] = Resource.Drawable.emoji_1f408,
+			["dragon"] = Resource.Drawable.emoji_1f409,
+			["crocodile"] = Resource.Drawable.emoji_1f40a,
+			["whale2"] = Resource.Drawable.emoji_1f40b,
+			["snail"] = Resource.Drawable.emoji_1f40c,
+			["snake"] = Resource.Drawable.emoji_1f40d,
+			["racehorse"] = Resource.Drawable.emoji_1f40e,
+			["ram"] = Resource.Drawable.emoji_1f40f,
+			["goat"] = Resource.Drawable.emoji_1f410,
+			["sheep"] = Resource.Drawable.emoji_1f411,
+			["monkey"] = Resource.Drawable.emoji_1f412,
+			["rooster"] = Resource.Drawable.emoji_1f413,
+			["chicken"] = Resource.Drawable.emoji_1f414,
+			["dog2"] = Resource.Drawable.emoji_1f415,
+			["pig2"] = Resource.Drawable.emoji_1f416,
+			["boar"] = Resource.Drawable.emoji_1f417,
+			["elephant"] = Resource.Drawable.emoji_1f418,
+			["octopus"] = Resource.Drawable.emoji_1f419,
+			["shell"] = Resource.Drawable.emoji_1f41a,
+			["bug"] = Resource.Drawable.emoji_1f41b,
+			["ant"] = Resource.Drawable.emoji_1f41c,
+			["bee"] = Resource.Drawable.emoji_1f41d,
+			["beetle"] = Resource.Drawable.emoji_1f41e,
+			["fish"] = Resource.Drawable.emoji_1f41f,
+			["tropical_fish"] = Resource.Drawable.emoji_1f420,
+			["blowfish"] = Resource.Drawable.emoji_1f421,
+			["turtle"] = Resource.Drawable.emoji_1f422,
+			["hatching_chick"] = Resource.Drawable.emoji_1f423,
+			["baby_chick"] = Resource.Drawable.emoji_1f424,
+			["hatched_chick"] = Resource.Drawable.emoji_1f425,
+			["bird"] = Resource.Drawable.emoji_1f426,
+			["penguin"] = Resource.Drawable.emoji_1f427,
+			["koala"] = Resource.Drawable.emoji_1f428,
+			["poodle"] = Resource.Drawable.emoji_1f429,
+			["dromedary_camel"] = Resource.Drawable.emoji_1f42a,
+			["camel"] = Resource.Drawable.emoji_1f42b,
+			["dolphin"] = Resource.Drawable.emoji_1f42c,
+			["mouse"] = Resource.Drawable.emoji_1f42d,
+			["cow"] = Resource.Drawable.emoji_1f42e,
+			["tiger"] = Resource.Drawable.emoji_1f42f,
+			["rabbit"] = Resource.Drawable.emoji_1f430,
+			["cat"] = Resource.Drawable.emoji_1f431,
+			["dragon_face"] = Resource.Drawable.emoji_1f432,
+			["whale"] = Resource.Drawable.emoji_1f433,
+			["horse"] = Resource.Drawable.emoji_1f434,
+			["monkey_face"] = Resource.Drawable.emoji_1f435,
+			["dog"] = Resource.Drawable.emoji_1f436,
+			["pig"] = Resource.Drawable.emoji_1f437,
+			["frog"] = Resource.Drawable.emoji_1f438,
+			["hamster"] = Resource.Drawable.emoji_1f439,
+			["wolf"] = Resource.Drawable.emoji_1f43a,
+			["bear"] = Resource.Drawable.emoji_1f43b,
+			["panda_face"] = Resource.Drawable.emoji_1f43c,
+			["pig_nose"] = Resource.Drawable.emoji_1f43d,
+			["feet"] = Resource.Drawable.emoji_1f43e,
+			["eyes"] = Resource.Drawable.emoji_1f440,
+			["ear"] = Resource.Drawable.emoji_1f442,
+			["nose"] = Resource.Drawable.emoji_1f443,
+			["lips"] = Resource.Drawable.emoji_1f444,
+			["tongue"] = Resource.Drawable.emoji_1f445,
+			["point_up_2"] = Resource.Drawable.emoji_1f446,
+			["point_down"] = Resource.Drawable.emoji_1f447,
+			["point_left"] = Resource.Drawable.emoji_1f448,
+			["point_right"] = Resource.Drawable.emoji_1f449,
+			["facepunch"] = Resource.Drawable.emoji_1f44a,
+			["wave"] = Resource.Drawable.emoji_1f44b,
+			["ok_hand"] = Resource.Drawable.emoji_1f44c,
+			["+1"] = Resource.Drawable.emoji_1f44d,
+			["-1"] = Resource.Drawable.emoji_1f44e,
+			["clap"] = Resource.Drawable.emoji_1f44f,
+			["open_hands"] = Resource.Drawable.emoji_1f450,
+			["crown"] = Resource.Drawable.emoji_1f451,
+			["womans_hat"] = Resource.Drawable.emoji_1f452,
+			["eyeglasses"] = Resource.Drawable.emoji_1f453,
+			["necktie"] = Resource.Drawable.emoji_1f454,
+			["shirt"] = Resource.Drawable.emoji_1f455,
+			["jeans"] = Resource.Drawable.emoji_1f456,
+			["dress"] = Resource.Drawable.emoji_1f457,
+			["kimono"] = Resource.Drawable.emoji_1f458,
+			["bikini"] = Resource.Drawable.emoji_1f459,
+			["womans_clothes"] = Resource.Drawable.emoji_1f45a,
+			["purse"] = Resource.Drawable.emoji_1f45b,
+			["handbag"] = Resource.Drawable.emoji_1f45c,
+			["pouch"] = Resource.Drawable.emoji_1f45d,
+			["mans_shoe"] = Resource.Drawable.emoji_1f45e,
+			["athletic_shoe"] = Resource.Drawable.emoji_1f45f,
+			["high_heel"] = Resource.Drawable.emoji_1f460,
+			["sandal"] = Resource.Drawable.emoji_1f461,
+			["boot"] = Resource.Drawable.emoji_1f462,
+			["footprints"] = Resource.Drawable.emoji_1f463,
+			["bust_in_silhouette"] = Resource.Drawable.emoji_1f464,
+			["busts_in_silhouette"] = Resource.Drawable.emoji_1f465,
+			["boy"] = Resource.Drawable.emoji_1f466,
+			["girl"] = Resource.Drawable.emoji_1f467,
+			["man"] = Resource.Drawable.emoji_1f468,
+			["woman"] = Resource.Drawable.emoji_1f469,
+			["family"] = Resource.Drawable.emoji_1f46a,
+			["couple"] = Resource.Drawable.emoji_1f46b,
+			["two_men_holding_hands"] = Resource.Drawable.emoji_1f46c,
+			["two_women_holding_hands"] = Resource.Drawable.emoji_1f46d,
+			["cop"] = Resource.Drawable.emoji_1f46e,
+			["dancers"] = Resource.Drawable.emoji_1f46f,
+			["bride_with_veil"] = Resource.Drawable.emoji_1f470,
+			["person_with_blond_hair"] = Resource.Drawable.emoji_1f471,
+			["man_with_gua_pi_mao"] = Resource.Drawable.emoji_1f472,
+			["man_with_turban"] = Resource.Drawable.emoji_1f473,
+			["older_man"] = Resource.Drawable.emoji_1f474,
+			["older_woman"] = Resource.Drawable.emoji_1f475,
+			["baby"] = Resource.Drawable.emoji_1f476,
+			["construction_worker"] = Resource.Drawable.emoji_1f477,
+			["princess"] = Resource.Drawable.emoji_1f478,
+			["japanese_ogre"] = Resource.Drawable.emoji_1f479,
+			["japanese_goblin"] = Resource.Drawable.emoji_1f47a,
+			["ghost"] = Resource.Drawable.emoji_1f47b,
+			["angel"] = Resource.Drawable.emoji_1f47c,
+			["alien"] = Resource.Drawable.emoji_1f47d,
+			["space_invader"] = Resource.Drawable.emoji_1f47e,
+			["imp"] = Resource.Drawable.emoji_1f47f,
+			["skull"] = Resource.Drawable.emoji_1f480,
+			["information_desk_person"] = Resource.Drawable.emoji_1f481,
+			["guardsman"] = Resource.Drawable.emoji_1f482,
+			["dancer"] = Resource.Drawable.emoji_1f483,
+			["lipstick"] = Resource.Drawable.emoji_1f484,
+			["nail_care"] = Resource.Drawable.emoji_1f485,
+			["massage"] = Resource.Drawable.emoji_1f486,
+			["haircut"] = Resource.Drawable.emoji_1f487,
+			["barber"] = Resource.Drawable.emoji_1f488,
+			["syringe"] = Resource.Drawable.emoji_1f489,
+			["pill"] = Resource.Drawable.emoji_1f48a,
+			["kiss"] = Resource.Drawable.emoji_1f48b,
+			["love_letter"] = Resource.Drawable.emoji_1f48c,
+			["ring"] = Resource.Drawable.emoji_1f48d,
+			["gem"] = Resource.Drawable.emoji_1f48e,
+			["couplekiss"] = Resource.Drawable.emoji_1f48f,
+			["bouquet"] = Resource.Drawable.emoji_1f490,
+			["couple_with_heart"] = Resource.Drawable.emoji_1f491,
+			["wedding"] = Resource.Drawable.emoji_1f492,
+			["heartbeat"] = Resource.Drawable.emoji_1f493,
+			["broken_heart"] = Resource.Drawable.emoji_1f494,
+			["two_hearts"] = Resource.Drawable.emoji_1f495,
+			["sparkling_heart"] = Resource.Drawable.emoji_1f496,
+			["heartpulse"] = Resource.Drawable.emoji_1f497,
+			["cupid"] = Resource.Drawable.emoji_1f498,
+			["blue_heart"] = Resource.Drawable.emoji_1f499,
+			["green_heart"] = Resource.Drawable.emoji_1f49a,
+			["yellow_heart"] = Resource.Drawable.emoji_1f49b,
+			["purple_heart"] = Resource.Drawable.emoji_1f49c,
+			["gift_heart"] = Resource.Drawable.emoji_1f49d,
+			["revolving_hearts"] = Resource.Drawable.emoji_1f49e,
+			["heart_decoration"] = Resource.Drawable.emoji_1f49f,
+			["diamond_shape_with_a_dot_inside"] = Resource.Drawable.emoji_1f4a0,
+			["bulb"] = Resource.Drawable.emoji_1f4a1,
+			["anger"] = Resource.Drawable.emoji_1f4a2,
+			["bomb"] = Resource.Drawable.emoji_1f4a3,
+			["zzz"] = Resource.Drawable.emoji_1f4a4,
+			["boom"] = Resource.Drawable.emoji_1f4a5,
+			["sweat_drops"] = Resource.Drawable.emoji_1f4a6,
+			["droplet"] = Resource.Drawable.emoji_1f4a7,
+			["dash"] = Resource.Drawable.emoji_1f4a8,
+			["hankey"] = Resource.Drawable.emoji_1f4a9,
+			["muscle"] = Resource.Drawable.emoji_1f4aa,
+			["dizzy"] = Resource.Drawable.emoji_1f4ab,
+			["speech_balloon"] = Resource.Drawable.emoji_1f4ac,
+			["thought_balloon"] = Resource.Drawable.emoji_1f4ad,
+			["white_flower"] = Resource.Drawable.emoji_1f4ae,
+			["100"] = Resource.Drawable.emoji_1f4af,
+			["moneybag"] = Resource.Drawable.emoji_1f4b0,
+			["currency_exchange"] = Resource.Drawable.emoji_1f4b1,
+			["heavy_dollar_sign"] = Resource.Drawable.emoji_1f4b2,
+			["credit_card"] = Resource.Drawable.emoji_1f4b3,
+			["yen"] = Resource.Drawable.emoji_1f4b4,
+			["dollar"] = Resource.Drawable.emoji_1f4b5,
+			["euro"] = Resource.Drawable.emoji_1f4b6,
+			["pound"] = Resource.Drawable.emoji_1f4b7,
+			["money_with_wings"] = Resource.Drawable.emoji_1f4b8,
+			["chart"] = Resource.Drawable.emoji_1f4b9,
+			["seat"] = Resource.Drawable.emoji_1f4ba,
+			["computer"] = Resource.Drawable.emoji_1f4bb,
+			["briefcase"] = Resource.Drawable.emoji_1f4bc,
+			["minidisc"] = Resource.Drawable.emoji_1f4bd,
+			["floppy_disk"] = Resource.Drawable.emoji_1f4be,
+			["cd"] = Resource.Drawable.emoji_1f4bf,
+			["dvd"] = Resource.Drawable.emoji_1f4c0,
+			["file_folder"] = Resource.Drawable.emoji_1f4c1,
+			["open_file_folder"] = Resource.Drawable.emoji_1f4c2,
+			["page_with_curl"] = Resource.Drawable.emoji_1f4c3,
+			["page_facing_up"] = Resource.Drawable.emoji_1f4c4,
+			["date"] = Resource.Drawable.emoji_1f4c5,
+			["calendar"] = Resource.Drawable.emoji_1f4c6,
+			["card_index"] = Resource.Drawable.emoji_1f4c7,
+			["chart_with_upwards_trend"] = Resource.Drawable.emoji_1f4c8,
+			["chart_with_downwards_trend"] = Resource.Drawable.emoji_1f4c9,
+			["bar_chart"] = Resource.Drawable.emoji_1f4ca,
+			["clipboard"] = Resource.Drawable.emoji_1f4cb,
+			["pushpin"] = Resource.Drawable.emoji_1f4cc,
+			["round_pushpin"] = Resource.Drawable.emoji_1f4cd,
+			["paperclip"] = Resource.Drawable.emoji_1f4ce,
+			["straight_ruler"] = Resource.Drawable.emoji_1f4cf,
+			["triangular_ruler"] = Resource.Drawable.emoji_1f4d0,
+			["bookmark_tabs"] = Resource.Drawable.emoji_1f4d1,
+			["ledger"] = Resource.Drawable.emoji_1f4d2,
+			["notebook"] = Resource.Drawable.emoji_1f4d3,
+			["notebook_with_decorative_cover"] = Resource.Drawable.emoji_1f4d4,
+			["closed_book"] = Resource.Drawable.emoji_1f4d5,
+			["book"] = Resource.Drawable.emoji_1f4d6,
+			["green_book"] = Resource.Drawable.emoji_1f4d7,
+			["blue_book"] = Resource.Drawable.emoji_1f4d8,
+			["orange_book"] = Resource.Drawable.emoji_1f4d9,
+			["books"] = Resource.Drawable.emoji_1f4da,
+			["name_badge"] = Resource.Drawable.emoji_1f4db,
+			["scroll"] = Resource.Drawable.emoji_1f4dc,
+			["memo"] = Resource.Drawable.emoji_1f4dd,
+			["telephone_receiver"] = Resource.Drawable.emoji_1f4de,
+			["pager"] = Resource.Drawable.emoji_1f4df,
+			["fax"] = Resource.Drawable.emoji_1f4e0,
+			["satellite"] = Resource.Drawable.emoji_1f4e1,
+			["loudspeaker"] = Resource.Drawable.emoji_1f4e2,
+			["mega"] = Resource.Drawable.emoji_1f4e3,
+			["outbox_tray"] = Resource.Drawable.emoji_1f4e4,
+			["inbox_tray"] = Resource.Drawable.emoji_1f4e5,
+			["package"] = Resource.Drawable.emoji_1f4e6,
+			["e-mail"] = Resource.Drawable.emoji_1f4e7,
+			["incoming_envelope"] = Resource.Drawable.emoji_1f4e8,
+			["envelope_with_arrow"] = Resource.Drawable.emoji_1f4e9,
+			["mailbox_closed"] = Resource.Drawable.emoji_1f4ea,
+			["mailbox"] = Resource.Drawable.emoji_1f4eb,
+			["mailbox_with_mail"] = Resource.Drawable.emoji_1f4ec,
+			["mailbox_with_no_mail"] = Resource.Drawable.emoji_1f4ed,
+			["postbox"] = Resource.Drawable.emoji_1f4ee,
+			["postal_horn"] = Resource.Drawable.emoji_1f4ef,
+			["newspaper"] = Resource.Drawable.emoji_1f4f0,
+			["iphone"] = Resource.Drawable.emoji_1f4f1,
+			["calling"] = Resource.Drawable.emoji_1f4f2,
+			["vibration_mode"] = Resource.Drawable.emoji_1f4f3,
+			["mobile_phone_off"] = Resource.Drawable.emoji_1f4f4,
+			["no_mobile_phones"] = Resource.Drawable.emoji_1f4f5,
+			["signal_strength"] = Resource.Drawable.emoji_1f4f6,
+			["camera"] = Resource.Drawable.emoji_1f4f7,
+			["video_camera"] = Resource.Drawable.emoji_1f4f9,
+			["tv"] = Resource.Drawable.emoji_1f4fa,
+			["radio"] = Resource.Drawable.emoji_1f4fb,
+			["vhs"] = Resource.Drawable.emoji_1f4fc,
+			["twisted_rightwards_arrows"] = Resource.Drawable.emoji_1f500,
+			["repeat"] = Resource.Drawable.emoji_1f501,
+			["repeat_one"] = Resource.Drawable.emoji_1f502,
+			["arrows_clockwise"] = Resource.Drawable.emoji_1f503,
+			["arrows_counterclockwise"] = Resource.Drawable.emoji_1f504,
+			["low_brightness"] = Resource.Drawable.emoji_1f505,
+			["high_brightness"] = Resource.Drawable.emoji_1f506,
+			["mute"] = Resource.Drawable.emoji_1f507,
+			["speaker"] = Resource.Drawable.emoji_1f508,
+			["sound"] = Resource.Drawable.emoji_1f509,
+			["loud_sound"] = Resource.Drawable.emoji_1f50a,
+			["battery"] = Resource.Drawable.emoji_1f50b,
+			["electric_plug"] = Resource.Drawable.emoji_1f50c,
+			["mag"] = Resource.Drawable.emoji_1f50d,
+			["mag_right"] = Resource.Drawable.emoji_1f50e,
+			["lock_with_ink_pen"] = Resource.Drawable.emoji_1f50f,
+			["closed_lock_with_key"] = Resource.Drawable.emoji_1f510,
+			["key"] = Resource.Drawable.emoji_1f511,
+			["lock"] = Resource.Drawable.emoji_1f512,
+			["unlock"] = Resource.Drawable.emoji_1f513,
+			["bell"] = Resource.Drawable.emoji_1f514,
+			["no_bell"] = Resource.Drawable.emoji_1f515,
+			["bookmark"] = Resource.Drawable.emoji_1f516,
+			["link"] = Resource.Drawable.emoji_1f517,
+			["radio_button"] = Resource.Drawable.emoji_1f518,
+			["back"] = Resource.Drawable.emoji_1f519,
+			["end"] = Resource.Drawable.emoji_1f51a,
+			["on"] = Resource.Drawable.emoji_1f51b,
+			["soon"] = Resource.Drawable.emoji_1f51c,
+			["top"] = Resource.Drawable.emoji_1f51d,
+			["underage"] = Resource.Drawable.emoji_1f51e,
+			["keycap_ten"] = Resource.Drawable.emoji_1f51f,
+			["capital_abcd"] = Resource.Drawable.emoji_1f520,
+			["abcd"] = Resource.Drawable.emoji_1f521,
+			["1234"] = Resource.Drawable.emoji_1f522,
+			["symbols"] = Resource.Drawable.emoji_1f523,
+			["abc"] = Resource.Drawable.emoji_1f524,
+			["fire"] = Resource.Drawable.emoji_1f525,
+			["flashlight"] = Resource.Drawable.emoji_1f526,
+			["wrench"] = Resource.Drawable.emoji_1f527,
+			["hammer"] = Resource.Drawable.emoji_1f528,
+			["nut_and_bolt"] = Resource.Drawable.emoji_1f529,
+			["hocho"] = Resource.Drawable.emoji_1f52a,
+			["gun"] = Resource.Drawable.emoji_1f52b,
+			["microscope"] = Resource.Drawable.emoji_1f52c,
+			["telescope"] = Resource.Drawable.emoji_1f52d,
+			["crystal_ball"] = Resource.Drawable.emoji_1f52e,
+			["six_pointed_star"] = Resource.Drawable.emoji_1f52f,
+			["beginner"] = Resource.Drawable.emoji_1f530,
+			["trident"] = Resource.Drawable.emoji_1f531,
+			["black_square_button"] = Resource.Drawable.emoji_1f532,
+			["white_square_button"] = Resource.Drawable.emoji_1f533,
+			["red_circle"] = Resource.Drawable.emoji_1f534,
+			["large_blue_circle"] = Resource.Drawable.emoji_1f535,
+			["large_orange_diamond"] = Resource.Drawable.emoji_1f536,
+			["large_blue_diamond"] = Resource.Drawable.emoji_1f537,
+			["small_orange_diamond"] = Resource.Drawable.emoji_1f538,
+			["small_blue_diamond"] = Resource.Drawable.emoji_1f539,
+			["small_red_triangle"] = Resource.Drawable.emoji_1f53a,
+			["small_red_triangle_down"] = Resource.Drawable.emoji_1f53b,
+			["arrow_up_small"] = Resource.Drawable.emoji_1f53c,
+			["arrow_down_small"] = Resource.Drawable.emoji_1f53d,
+			["clock1"] = Resource.Drawable.emoji_1f550,
+			["clock2"] = Resource.Drawable.emoji_1f551,
+			["clock3"] = Resource.Drawable.emoji_1f552,
+			["clock4"] = Resource.Drawable.emoji_1f553,
+			["clock5"] = Resource.Drawable.emoji_1f554,
+			["clock6"] = Resource.Drawable.emoji_1f555,
+			["clock7"] = Resource.Drawable.emoji_1f556,
+			["clock8"] = Resource.Drawable.emoji_1f557,
+			["clock9"] = Resource.Drawable.emoji_1f558,
+			["clock10"] = Resource.Drawable.emoji_1f559,
+			["clock11"] = Resource.Drawable.emoji_1f55a,
+			["clock12"] = Resource.Drawable.emoji_1f55b,
+			["clock130"] = Resource.Drawable.emoji_1f55c,
+			["clock230"] = Resource.Drawable.emoji_1f55d,
+			["clock330"] = Resource.Drawable.emoji_1f55e,
+			["clock430"] = Resource.Drawable.emoji_1f55f,
+			["clock530"] = Resource.Drawable.emoji_1f560,
+			["clock630"] = Resource.Drawable.emoji_1f561,
+			["clock730"] = Resource.Drawable.emoji_1f562,
+			["clock830"] = Resource.Drawable.emoji_1f563,
+			["clock930"] = Resource.Drawable.emoji_1f564,
+			["clock1030"] = Resource.Drawable.emoji_1f565,
+			["clock1130"] = Resource.Drawable.emoji_1f566,
+			["clock1230"] = Resource.Drawable.emoji_1f567,
+			["mount_fuji"] = Resource.Drawable.emoji_1f5fb,
+			["tokyo_tower"] = Resource.Drawable.emoji_1f5fc,
+			["statue_of_liberty"] = Resource.Drawable.emoji_1f5fd,
+			["japan"] = Resource.Drawable.emoji_1f5fe,
+			["moyai"] = Resource.Drawable.emoji_1f5ff,
+			["grinning"] = Resource.Drawable.emoji_1f600,
+			["grin"] = Resource.Drawable.emoji_1f601,
+			["joy"] = Resource.Drawable.emoji_1f602,
+			["smiley"] = Resource.Drawable.emoji_1f603,
+			["smile"] = Resource.Drawable.emoji_1f604,
+			["sweat_smile"] = Resource.Drawable.emoji_1f605,
+			["satisfied"] = Resource.Drawable.emoji_1f606,
+			["innocent"] = Resource.Drawable.emoji_1f607,
+			["smiling_imp"] = Resource.Drawable.emoji_1f608,
+			["wink"] = Resource.Drawable.emoji_1f609,
+			["blush"] = Resource.Drawable.emoji_1f60a,
+			["yum"] = Resource.Drawable.emoji_1f60b,
+			["relieved"] = Resource.Drawable.emoji_1f60c,
+			["heart_eyes"] = Resource.Drawable.emoji_1f60d,
+			["sunglasses"] = Resource.Drawable.emoji_1f60e,
+			["smirk"] = Resource.Drawable.emoji_1f60f,
+			["neutral_face"] = Resource.Drawable.emoji_1f610,
+			["expressionless"] = Resource.Drawable.emoji_1f611,
+			["unamused"] = Resource.Drawable.emoji_1f612,
+			["sweat"] = Resource.Drawable.emoji_1f613,
+			["pensive"] = Resource.Drawable.emoji_1f614,
+			["confused"] = Resource.Drawable.emoji_1f615,
+			["confounded"] = Resource.Drawable.emoji_1f616,
+			["kissing"] = Resource.Drawable.emoji_1f617,
+			["kissing_heart"] = Resource.Drawable.emoji_1f618,
+			["kissing_smiling_eyes"] = Resource.Drawable.emoji_1f619,
+			["kissing_closed_eyes"] = Resource.Drawable.emoji_1f61a,
+			["stuck_out_tongue"] = Resource.Drawable.emoji_1f61b,
+			["stuck_out_tongue_winking_eye"] = Resource.Drawable.emoji_1f61c,
+			["stuck_out_tongue_closed_eyes"] = Resource.Drawable.emoji_1f61d,
+			["disappointed"] = Resource.Drawable.emoji_1f61e,
+			["worried"] = Resource.Drawable.emoji_1f61f,
+			["angry"] = Resource.Drawable.emoji_1f620,
+			["rage"] = Resource.Drawable.emoji_1f621,
+			["cry"] = Resource.Drawable.emoji_1f622,
+			["persevere"] = Resource.Drawable.emoji_1f623,
+			["triumph"] = Resource.Drawable.emoji_1f624,
+			["disappointed_relieved"] = Resource.Drawable.emoji_1f625,
+			["frowning"] = Resource.Drawable.emoji_1f626,
+			["anguished"] = Resource.Drawable.emoji_1f627,
+			["fearful"] = Resource.Drawable.emoji_1f628,
+			["weary"] = Resource.Drawable.emoji_1f629,
+			["sleepy"] = Resource.Drawable.emoji_1f62a,
+			["tired_face"] = Resource.Drawable.emoji_1f62b,
+			["grimacing"] = Resource.Drawable.emoji_1f62c,
+			["sob"] = Resource.Drawable.emoji_1f62d,
+			["open_mouth"] = Resource.Drawable.emoji_1f62e,
+			["hushed"] = Resource.Drawable.emoji_1f62f,
+			["cold_sweat"] = Resource.Drawable.emoji_1f630,
+			["scream"] = Resource.Drawable.emoji_1f631,
+			["astonished"] = Resource.Drawable.emoji_1f632,
+			["flushed"] = Resource.Drawable.emoji_1f633,
+			["sleeping"] = Resource.Drawable.emoji_1f634,
+			["dizzy_face"] = Resource.Drawable.emoji_1f635,
+			["no_mouth"] = Resource.Drawable.emoji_1f636,
+			["mask"] = Resource.Drawable.emoji_1f637,
+			["smile_cat"] = Resource.Drawable.emoji_1f638,
+			["joy_cat"] = Resource.Drawable.emoji_1f639,
+			["smiley_cat"] = Resource.Drawable.emoji_1f63a,
+			["heart_eyes_cat"] = Resource.Drawable.emoji_1f63b,
+			["smirk_cat"] = Resource.Drawable.emoji_1f63c,
+			["kissing_cat"] = Resource.Drawable.emoji_1f63d,
+			["pouting_cat"] = Resource.Drawable.emoji_1f63e,
+			["crying_cat_face"] = Resource.Drawable.emoji_1f63f,
+			["scream_cat"] = Resource.Drawable.emoji_1f640,
+			["no_good"] = Resource.Drawable.emoji_1f645,
+			["ok_woman"] = Resource.Drawable.emoji_1f646,
+			["bow"] = Resource.Drawable.emoji_1f647,
+			["see_no_evil"] = Resource.Drawable.emoji_1f648,
+			["hear_no_evil"] = Resource.Drawable.emoji_1f649,
+			["speak_no_evil"] = Resource.Drawable.emoji_1f64a,
+			["raising_hand"] = Resource.Drawable.emoji_1f64b,
+			["raised_hands"] = Resource.Drawable.emoji_1f64c,
+			["person_frowning"] = Resource.Drawable.emoji_1f64d,
+			["person_with_pouting_face"] = Resource.Drawable.emoji_1f64e,
+			["pray"] = Resource.Drawable.emoji_1f64f,
+			["rocket"] = Resource.Drawable.emoji_1f680,
+			["helicopter"] = Resource.Drawable.emoji_1f681,
+			["steam_locomotive"] = Resource.Drawable.emoji_1f682,
+			["railway_car"] = Resource.Drawable.emoji_1f683,
+			["train"] = Resource.Drawable.emoji_1f68b,
+			["bullettrain_side"] = Resource.Drawable.emoji_1f684,
+			["bullettrain_front"] = Resource.Drawable.emoji_1f685,
+			["train2"] = Resource.Drawable.emoji_1f686,
+			["metro"] = Resource.Drawable.emoji_1f687,
+			["light_rail"] = Resource.Drawable.emoji_1f688,
+			["station"] = Resource.Drawable.emoji_1f689,
+			["tram"] = Resource.Drawable.emoji_1f68a,
+			["bus"] = Resource.Drawable.emoji_1f68c,
+			["oncoming_bus"] = Resource.Drawable.emoji_1f68d,
+			["trolleybus"] = Resource.Drawable.emoji_1f68e,
+			["busstop"] = Resource.Drawable.emoji_1f68f,
+			["minibus"] = Resource.Drawable.emoji_1f690,
+			["ambulance"] = Resource.Drawable.emoji_1f691,
+			["fire_engine"] = Resource.Drawable.emoji_1f692,
+			["police_car"] = Resource.Drawable.emoji_1f693,
+			["oncoming_police_car"] = Resource.Drawable.emoji_1f694,
+			["taxi"] = Resource.Drawable.emoji_1f695,
+			["oncoming_taxi"] = Resource.Drawable.emoji_1f696,
+			["car"] = Resource.Drawable.emoji_1f697,
+			["oncoming_automobile"] = Resource.Drawable.emoji_1f698,
+			["blue_car"] = Resource.Drawable.emoji_1f699,
+			["truck"] = Resource.Drawable.emoji_1f69a,
+			["articulated_lorry"] = Resource.Drawable.emoji_1f69b,
+			["tractor"] = Resource.Drawable.emoji_1f69c,
+			["monorail"] = Resource.Drawable.emoji_1f69d,
+			["mountain_railway"] = Resource.Drawable.emoji_1f69e,
+			["suspension_railway"] = Resource.Drawable.emoji_1f69f,
+			["mountain_cableway"] = Resource.Drawable.emoji_1f6a0,
+			["aerial_tramway"] = Resource.Drawable.emoji_1f6a1,
+			["ship"] = Resource.Drawable.emoji_1f6a2,
+			["rowboat"] = Resource.Drawable.emoji_1f6a3,
+			["speedboat"] = Resource.Drawable.emoji_1f6a4,
+			["traffic_light"] = Resource.Drawable.emoji_1f6a5,
+			["vertical_traffic_light"] = Resource.Drawable.emoji_1f6a6,
+			["construction"] = Resource.Drawable.emoji_1f6a7,
+			["rotating_light"] = Resource.Drawable.emoji_1f6a8,
+			["triangular_flag_on_post"] = Resource.Drawable.emoji_1f6a9,
+			["door"] = Resource.Drawable.emoji_1f6aa,
+			["no_entry_sign"] = Resource.Drawable.emoji_1f6ab,
+			["smoking"] = Resource.Drawable.emoji_1f6ac,
+			["no_smoking"] = Resource.Drawable.emoji_1f6ad,
+			["put_litter_in_its_place"] = Resource.Drawable.emoji_1f6ae,
+			["do_not_litter"] = Resource.Drawable.emoji_1f6af,
+			["potable_water"] = Resource.Drawable.emoji_1f6b0,
+			["non-potable_water"] = Resource.Drawable.emoji_1f6b1,
+			["bike"] = Resource.Drawable.emoji_1f6b2,
+			["no_bicycles"] = Resource.Drawable.emoji_1f6b3,
+			["bicyclist"] = Resource.Drawable.emoji_1f6b4,
+			["mountain_bicyclist"] = Resource.Drawable.emoji_1f6b5,
+			["walking"] = Resource.Drawable.emoji_1f6b6,
+			["no_pedestrians"] = Resource.Drawable.emoji_1f6b7,
+			["children_crossing"] = Resource.Drawable.emoji_1f6b8,
+			["mens"] = Resource.Drawable.emoji_1f6b9,
+			["womens"] = Resource.Drawable.emoji_1f6ba,
+			["restroom"] = Resource.Drawable.emoji_1f6bb,
+			["baby_symbol"] = Resource.Drawable.emoji_1f6bc,
+			["toilet"] = Resource.Drawable.emoji_1f6bd,
+			["wc"] = Resource.Drawable.emoji_1f6be,
+			["shower"] = Resource.Drawable.emoji_1f6bf,
+			["bath"] = Resource.Drawable.emoji_1f6c0,
+			["bathtub"] = Resource.Drawable.emoji_1f6c1,
+			["passport_control"] = Resource.Drawable.emoji_1f6c2,
+			["customs"] = Resource.Drawable.emoji_1f6c3,
+			["baggage_claim"] = Resource.Drawable.emoji_1f6c4,
+			["left_luggage"] = Resource.Drawable.emoji_1f6c5,
+			["hash"] = Resource.Drawable.emoji_0023,
+			["zero"] = Resource.Drawable.emoji_0030,
+			["one"] = Resource.Drawable.emoji_0031,
+			["two"] = Resource.Drawable.emoji_0032,
+			["three"] = Resource.Drawable.emoji_0033,
+			["four"] = Resource.Drawable.emoji_0034,
+			["five"] = Resource.Drawable.emoji_0035,
+			["six"] = Resource.Drawable.emoji_0036,
+			["seven"] = Resource.Drawable.emoji_0037,
+			["eight"] = Resource.Drawable.emoji_0038,
+			["nine"] = Resource.Drawable.emoji_0039,
+			["cn"] = Resource.Drawable.emoji_1f1e8_1f1f3,
+			["de"] = Resource.Drawable.emoji_1f1e9_1f1ea,
+			["es"] = Resource.Drawable.emoji_1f1ea_1f1f8,
+			["fr"] = Resource.Drawable.emoji_1f1eb_1f1f7,
+			["gb"] = Resource.Drawable.emoji_1f1ec_1f1e7,
+			["it"] = Resource.Drawable.emoji_1f1ee_1f1f9,
+			["jp"] = Resource.Drawable.emoji_1f1ef_1f1f5,
+			["kr"] = Resource.Drawable.emoji_1f1f0_1f1f7,
+			["ru"] = Resource.Drawable.emoji_1f1f7_1f1fa,
+			["us"] = Resource.Drawable.emoji_1f1fa_1f1f8
+		};
 
-    /**
-     * Convert emoji characters of the given Spannable to the according emojicon.
-     *
-     * @param context
-     * @param text
-     * @param emojiSize
-     * @param index
-     * @param length
-     */
-    public static void AddEmojis(Context context, ISpannable text, int emojiSize, int index, int length)
+		public static bool AddEmojis(Context context, ISpannable spannable, int emojiSize)
 		{
-        int textLength = text.Length();
-        int textLengthToProcessMax = textLength - index;
-        int textLengthToProcess = length < 0 || length >= textLengthToProcessMax ? textLength : (length+index);
+			var hasChanges = false;
 
-        // remove spans throughout all text
-			//EmojiconSpan[]
-        var oldSpans = text.GetSpans(0, textLength,Java.Lang.Class.FromType(typeof(EmojiconSpan)));
-        for (int i = 0; i < oldSpans.Length; i++) {
-            text.RemoveSpan(oldSpans[i]);
-        }
+			var regex = new Regex(@"(?<=\:)(\S*?)(?=\:)");
 
-        int skip;
-        for (int i = index; i < textLengthToProcess; i += skip)
-        {
-            skip = 0;
-            int icon = 0;
-            char c = text.CharAt(i);
-            if (IsSoftBankEmoji(c))
-            {
-                icon = GetSoftbankEmojiResource(c);
-                skip = icon == 0 ? 0 : 1;
-            }
+			foreach (Match current in regex.Matches(spannable.ToString()))
+			{
+				int smileResourceId;
 
-            if (icon == 0)
-            {
-                int unicode = Character.CodePointAt(text, i);
-                skip = Character.CharCount(unicode);
+				if (Emoticons.TryGetValue(current.Value, out smileResourceId))
+				{
+					var span = new EmojiconSpan(context, smileResourceId, emojiSize);
 
-                if (unicode > 0xff)
-                {
-                    icon = GetEmojiResource(context, unicode);
-                }
+					var start = current.Index - 1;
+					var end = current.Index + current.Length + 1;
 
-                if (icon == 0 && i + skip < textLengthToProcess)
-                {
-                    int followUnicode = Character.CodePointAt(text, i + skip);
-                    if (followUnicode == 0x20e3)
-                    {
-                        int followSkip = Character.CharCount(followUnicode);
-                        switch (unicode)
-                        {
-                            case 0x0031:
-                                icon = Resource.Drawable.emoji_0031;
-                                break;
-                            case 0x0032:
-                                icon = Resource.Drawable.emoji_0032;
-                                break;
-                            case 0x0033:
-                                icon = Resource.Drawable.emoji_0033;
-                                break;
-                            case 0x0034:
-                                icon = Resource.Drawable.emoji_0034;
-                                break;
-                            case 0x0035:
-                                icon = Resource.Drawable.emoji_0035;
-                                break;
-                            case 0x0036:
-                                icon = Resource.Drawable.emoji_0036;
-                                break;
-                            case 0x0037:
-                                icon = Resource.Drawable.emoji_0037;
-                                break;
-                            case 0x0038:
-                                icon = Resource.Drawable.emoji_0038;
-                                break;
-                            case 0x0039:
-                                icon = Resource.Drawable.emoji_0039;
-                                break;
-                            case 0x0030:
-                                icon = Resource.Drawable.emoji_0030;
-                                break;
-                            case 0x0023:
-                                icon = Resource.Drawable.emoji_0023;
-                                break;
-                            default:
-                                followSkip = 0;
-                                break;
-                        }
-                        skip += followSkip;
-                    }
-                    else
-                    {
-                        int followSkip = Character.CharCount(followUnicode);
-                        switch (unicode)
-                        {
-                            case 0x1f1ef:
-                                icon = (followUnicode == 0x1f1f5) ? Resource.Drawable.emoji_1f1ef_1f1f5 : 0;
-                                break;
-                            case 0x1f1fa:
-                                icon = (followUnicode == 0x1f1f8) ? Resource.Drawable.emoji_1f1fa_1f1f8 : 0;
-                                break;
-                            case 0x1f1eb:
-                                icon = (followUnicode == 0x1f1f7) ? Resource.Drawable.emoji_1f1eb_1f1f7 : 0;
-                                break;
-                            case 0x1f1e9:
-                                icon = (followUnicode == 0x1f1ea) ? Resource.Drawable.emoji_1f1e9_1f1ea : 0;
-                                break;
-                            case 0x1f1ee:
-                                icon = (followUnicode == 0x1f1f9) ? Resource.Drawable.emoji_1f1ee_1f1f9 : 0;
-                                break;
-                            case 0x1f1ec:
-                                icon = (followUnicode == 0x1f1e7) ? Resource.Drawable.emoji_1f1ec_1f1e7 : 0;
-                                break;
-                            case 0x1f1ea:
-                                icon = (followUnicode == 0x1f1f8) ? Resource.Drawable.emoji_1f1ea_1f1f8 : 0;
-                                break;
-                            case 0x1f1f7:
-                                icon = (followUnicode == 0x1f1fa) ? Resource.Drawable.emoji_1f1f7_1f1fa : 0;
-                                break;
-                            case 0x1f1e8:
-                                icon = (followUnicode == 0x1f1f3) ? Resource.Drawable.emoji_1f1e8_1f1f3 : 0;
-                                break;
-                            case 0x1f1f0:
-                                icon = (followUnicode == 0x1f1f7) ? Resource.Drawable.emoji_1f1f0_1f1f7 : 0;
-                                break;
-                            default:
-                                followSkip = 0;
-                                break;
-                        }
-                        skip += followSkip;
-                    }
-                }
-            }
+					spannable.SetSpan(span, start, end, SpanTypes.ExclusiveExclusive);
 
-            if (icon > 0)
-            {
-                text.SetSpan(new EmojiconSpan(context, icon, emojiSize), i, i + skip, SpanTypes.ExclusiveExclusive);
-            }
-        }
-        }
-    }
+					hasChanges = true;
+				}
+			}
+
+			return hasChanges;
+		}
+	}
 }

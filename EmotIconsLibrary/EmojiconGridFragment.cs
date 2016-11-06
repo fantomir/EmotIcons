@@ -41,7 +41,7 @@ namespace com.vasundharareddy.emojicon
             gridView = (GridView)view.FindViewById(Resource.Id.Emoji_GridView);
             if (mData == null)
             {
-                mData = People.DATA;
+                mData = People.Data;
             }           
             gridView.Adapter = new EmojiAdapter(view.Context, mData);
             gridView.ItemClick += OnItemClick;

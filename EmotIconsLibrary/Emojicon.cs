@@ -32,7 +32,7 @@ namespace com.vasundharareddy.emojicon
 
 		public static Emojicon FromChars(string chars) {
 			Emojicon emoji = new Emojicon();
-			emoji.emoji = chars;
+			emoji.emoji = $":{chars}:";
 			return emoji;
 		}
 		public Emojicon(string emoji) {

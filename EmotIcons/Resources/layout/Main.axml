@@ -1,28 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <com.vasundharareddy.emojicon.EmojiconTextView
-        android:id="@+id/txtEmojicon"
-        android:text="@string/i_love_emojicon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <com.vasundharareddy.emojicon.EmojiconEditText
-        android:id="@+id/editEmojicon"
-        android:hint="@string/hint"
-        android:text="@string/i_love_emojicon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <fragment
-        class="com.vasundharareddy.emojicon.EmojiconsFragment"
-        android:id="@+id/emojicons"
-        android:layout_width="match_parent"
-        android:layout_height="220dp" />
-    <Button
-        android:text="copy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button1"
-        android:layout_marginTop="10dp" />
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<TextView
+		android:text="Plain text:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:id="@+id/txtPlain"
+		android:text="@string/message"
+		android:textSize="16sp"
+		emojicon:emojiconSize="28sp"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<TextView
+		android:text="Text with emojicons:"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<com.vasundharareddy.emojicon.EmojiconTextView
+		android:id="@+id/txtEmojicon"
+		android:text="@string/message"
+		android:textSize="16sp"
+		emojicon:emojiconSize="28sp"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<com.vasundharareddy.emojicon.EmojiconEditText
+		android:id="@+id/editEmojicon"
+		android:text="@string/message"
+		emojicon:emojiconSize="28sp"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" />
+
+	<fragment
+		class="com.vasundharareddy.emojicon.EmojiconsFragment"
+		android:id="@+id/emojicons"
+		android:layout_width="match_parent"
+		android:layout_height="220dp" />
+
 </LinearLayout>

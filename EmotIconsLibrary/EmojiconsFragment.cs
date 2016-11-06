@@ -28,11 +28,11 @@ namespace com.vasundharareddy.emojicon
 			IEmojiconRecents recents = this;
 			List<EmojiconGridFragment> emojiFragments = new List<EmojiconGridFragment> () {
 				EmojiconRecentsGridFragment.NewInstance (),
-				EmojiconGridFragment.NewInstance (People.DATA, recents),
-				EmojiconGridFragment.NewInstance (Nature.DATA, recents),
-				EmojiconGridFragment.NewInstance (Objects.DATA, recents),
-				EmojiconGridFragment.NewInstance (Places.DATA, recents),
-				EmojiconGridFragment.NewInstance (Symbols.DATA, recents)
+				EmojiconGridFragment.NewInstance (People.Data, recents),
+				EmojiconGridFragment.NewInstance (Nature.Data, recents),
+				EmojiconGridFragment.NewInstance (Objects.Data, recents),
+				EmojiconGridFragment.NewInstance (Places.Data, recents),
+				EmojiconGridFragment.NewInstance (Symbols.Data, recents)
 			};
 			foreach (var fragment in emojiFragments) 
 			{
